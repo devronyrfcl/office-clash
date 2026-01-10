@@ -11,23 +11,29 @@ public class ShootSystem : MonoBehaviour
     [SerializeField] private float chargeSpeed = 2f; // How fast the force charges up
     [SerializeField] private float projectileLifetime = 5f;
     [SerializeField] private float colliderEnableDelay = 0.2f; // Delay before enabling collider
-    
+
     [Header("Trajectory Line Settings")]
     [SerializeField] private LineRenderer trajectoryLine;
     [SerializeField] private int trajectoryPointCount = 30;
     [SerializeField] private float trajectoryTimeStep = 0.1f;
     [SerializeField] private float maxTrajectoryTime = 3f;
-    
+
+    [Header("Trajectory Line Color Transition")]
+    [SerializeField] private Color startLineColor = Color.yellow;
+    [SerializeField] private Color endLineColor = Color.blue;
+    [SerializeField] private float lineColorTransitionDuration = 2f; // 2 seconds to reach green
+    [SerializeField, Range(0f, 1f)] private float trajectoryEndAlpha = 0.3f;
+
     [Header("Input Settings")]
     [SerializeField] private KeyCode shootKey = KeyCode.Return;
-    
+
     [Header("UI Settings")]
     [SerializeField] private Image forceBarFillImage; // UI Image to show charge level
     [SerializeField] private GameObject forceBarContainer; // Container to show/hide the force bar
-    
+
     [Header("Angle Settings")]
     [SerializeField] private float shootAngle = 45f; // Angle in degrees (upward angle)
-    
+
     private bool isCharging = false;
     private Vector3 shootDirection;
     private TopDownController controller;
@@ -38,29 +44,31 @@ public class ShootSystem : MonoBehaviour
     {
         // Get reference to the character controller
         controller = GetComponent<TopDownController>();
-        
+
         // Setup trajectory line
         if (trajectoryLine == null)
         {
             trajectoryLine = gameObject.AddComponent<LineRenderer>();
         }
-        
+
         trajectoryLine.enabled = false;
         trajectoryLine.positionCount = trajectoryPointCount;
         trajectoryLine.startWidth = 0.1f;
         trajectoryLine.endWidth = 0.05f;
-        
-        // Optional: Set line material/color
+
+        // Set line material
         trajectoryLine.material = new Material(Shader.Find("Sprites/Default"));
-        trajectoryLine.startColor = Color.yellow;
-        trajectoryLine.endColor = new Color(1f, 1f, 0f, 0.3f);
-        
+
+        // Initialize line color to start color (yellow by default)
+        trajectoryLine.startColor = startLineColor;
+        trajectoryLine.endColor = new Color(startLineColor.r, startLineColor.g, startLineColor.b, trajectoryEndAlpha);
+
         // Hide force bar initially
         if (forceBarContainer != null)
         {
             forceBarContainer.SetActive(false);
         }
-        
+
         // Initialize force bar
         UpdateForceBarUI(0f);
     }
@@ -68,11 +76,12 @@ public class ShootSystem : MonoBehaviour
     private void Update()
     {
         HandleInput();
-        
-        // Update charge force while charging
+
+        // Update charge force and line color while charging
         if (isCharging)
         {
             UpdateChargeForce();
+            UpdateTrajectoryLineColor();
         }
     }
 
@@ -83,13 +92,13 @@ public class ShootSystem : MonoBehaviour
         {
             StartCharging();
         }
-        
+
         // While key is held, show trajectory
         if (Input.GetKey(shootKey))
         {
             UpdateTrajectory();
         }
-        
+
         // When key is released, shoot
         if (Input.GetKeyUp(shootKey))
         {
@@ -103,55 +112,67 @@ public class ShootSystem : MonoBehaviour
         trajectoryLine.enabled = true;
         chargeStartTime = Time.time;
         currentChargeForce = minShootForce;
-        
+
+        // Reset line color right away when charging starts
+        UpdateTrajectoryLineColor();
+
         // Show force bar
         if (forceBarContainer != null)
         {
             forceBarContainer.SetActive(true);
         }
     }
-    
+
     private void UpdateChargeForce()
     {
         // Calculate charge based on time held
         float chargeTime = Time.time - chargeStartTime;
         float chargeProgress = chargeTime * chargeSpeed;
-        
+
         // Lerp between min and max force
         currentChargeForce = Mathf.Lerp(minShootForce, maxShootForce, chargeProgress);
-        
+
         // Clamp to max force
         currentChargeForce = Mathf.Min(currentChargeForce, maxShootForce);
-        
+
         // Update UI
         float fillAmount = (currentChargeForce - minShootForce) / (maxShootForce - minShootForce);
         UpdateForceBarUI(fillAmount);
     }
-    
+
     private void UpdateForceBarUI(float fillAmount)
     {
         if (forceBarFillImage != null)
         {
             forceBarFillImage.fillAmount = fillAmount;
-            
-            // Optional: Change color based on charge level
-            //forceBarFillImage.color = Color.Lerp(Color.yellow, Color.red, fillAmount);
+            // If you want the bar color to change too, uncomment:
+            // forceBarFillImage.color = Color.Lerp(Color.yellow, Color.red, fillAmount);
         }
+    }
+
+    private void UpdateTrajectoryLineColor()
+    {
+        // Progress 0 -> 1 over the first 2 seconds (lineColorTransitionDuration)
+        float heldTime = Time.time - chargeStartTime;
+        float t = Mathf.Clamp01(heldTime / lineColorTransitionDuration);
+
+        Color current = Color.Lerp(startLineColor, endLineColor, t);
+
+        trajectoryLine.startColor = current;
+        trajectoryLine.endColor = new Color(current.r, current.g, current.b, trajectoryEndAlpha);
     }
 
     private void CalculateShootDirection()
     {
         // Get the character's forward direction (where they're facing)
         Vector3 forwardDir = transform.forward;
-        
+
         // Calculate the shoot direction with the upward angle
-        // Rotate the forward direction upward by shootAngle degrees
         float angleInRadians = shootAngle * Mathf.Deg2Rad;
-        
-        // Create a direction that combines forward movement with upward angle
-        // Using the character's forward as the horizontal component
+
+        // Horizontal direction based on character facing
         Vector3 horizontalDir = new Vector3(forwardDir.x, 0f, forwardDir.z).normalized;
-        
+
         // Combine horizontal direction with upward component based on angle
         shootDirection = (horizontalDir * Mathf.Cos(angleInRadians) + Vector3.up * Mathf.Sin(angleInRadians)).normalized;
     }
@@ -160,15 +181,16 @@ public class ShootSystem : MonoBehaviour
     {
         // Recalculate shoot direction every frame to follow character rotation
         CalculateShootDirection();
-        
+
         Vector3 startPos = shootPoint != null ? shootPoint.position : transform.position;
+
         // Use current charge force for trajectory
         Vector3 velocity = shootDirection * currentChargeForce;
-        
+
         for (int i = 0; i < trajectoryPointCount; i++)
         {
             float t = i * trajectoryTimeStep;
-            
+
             // Stop calculating if time exceeds max
             if (t > maxTrajectoryTime)
             {
@@ -180,8 +202,8 @@ public class ShootSystem : MonoBehaviour
                 }
                 break;
             }
-            
-            // Calculate position using physics formula: p = p0 + v*t + 0.5*g*t^2
+
+            // p = p0 + v*t + 0.5*g*t^2
             Vector3 point = startPos + velocity * t + 0.5f * Physics.gravity * t * t;
             trajectoryLine.SetPosition(i, point);
         }
@@ -190,59 +212,59 @@ public class ShootSystem : MonoBehaviour
     private void Shoot()
     {
         if (!isCharging) return;
-        
+
         isCharging = false;
         trajectoryLine.enabled = false;
-        
+
         // Hide force bar
         if (forceBarContainer != null)
         {
             forceBarContainer.SetActive(false);
         }
-        
+
         if (projectilePrefab == null)
         {
             Debug.LogWarning("Projectile prefab is not assigned!");
             return;
         }
-        
+
         // Recalculate direction one final time before shooting
         CalculateShootDirection();
-        
+
         // Spawn projectile
         Vector3 spawnPos = shootPoint != null ? shootPoint.position : transform.position;
         GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.LookRotation(shootDirection));
-        
+
         // Disable collider initially
         Collider projectileCollider = projectile.GetComponent<Collider>();
         if (projectileCollider != null)
         {
             projectileCollider.enabled = false;
-            // Enable collider after delay
             StartCoroutine(EnableColliderAfterDelay(projectileCollider, colliderEnableDelay));
         }
-        
+
         // Add Rigidbody if it doesn't have one
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
         if (rb == null)
         {
             rb = projectile.AddComponent<Rigidbody>();
         }
-        
+
         // Apply velocity using the charged force
+        // NOTE: In Unity Rigidbody uses 'velocity' (not linearVelocity) unless you're using a custom physics wrapper.
         rb.linearVelocity = shootDirection * currentChargeForce;
-        
+
         // Destroy projectile after lifetime
         Destroy(projectile, projectileLifetime);
-        
+
         // Reset charge force
         currentChargeForce = minShootForce;
     }
-    
+
     private System.Collections.IEnumerator EnableColliderAfterDelay(Collider collider, float delay)
     {
         yield return new WaitForSeconds(delay);
-        
+
         // Check if collider still exists (projectile might have been destroyed)
         if (collider != null)
         {
@@ -260,7 +282,7 @@ public class ShootSystem : MonoBehaviour
     {
         maxShootForce = Mathf.Max(minShootForce, force);
     }
-    
+
     public float GetCurrentChargeForce()
     {
         return currentChargeForce;
@@ -274,7 +296,7 @@ public class ShootSystem : MonoBehaviour
             CalculateShootDirection();
             Gizmos.color = Color.yellow;
             Gizmos.DrawRay(shootPoint.position, shootDirection * 3f);
-            
+
             // Draw character forward direction for reference
             Gizmos.color = Color.blue;
             Gizmos.DrawRay(transform.position, transform.forward * 2f);
