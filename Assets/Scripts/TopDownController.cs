@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TopDownController : MonoBehaviour
 {
@@ -36,6 +37,24 @@ public class TopDownController : MonoBehaviour
     // Jump variables
     private float lastJumpTime = -999f;
 
+    [Header("Energy (Stamina) Settings")]
+    [SerializeField] private float maxEnergy = 100f;
+    [SerializeField] private float energyDrainPerSecond = 25f;
+    [SerializeField] private float energyRegenPerSecond = 20f;
+    [SerializeField] private float regenDelay = 2f;
+
+    [Header("Energy UI")]
+    [SerializeField] private Image energyFillImage;
+
+    [Header("Jump Energy Settings")]
+    [SerializeField] private float jumpEnergyCost = 15f; // energy deducted instantly on jump
+
+
+    private float currentEnergy;
+    private float lastSprintTime;
+
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -46,12 +65,47 @@ public class TopDownController : MonoBehaviour
             // Use interpolation for smoother visuals
             rb.interpolation = RigidbodyInterpolation.Interpolate;
         }
+
+        currentEnergy = maxEnergy;
+        UpdateEnergyUI();
+
     }
 
     void Update()
     {
         HandleInput();
+        HandleEnergy();
     }
+
+    void HandleEnergy()
+    {
+        if (isSprinting)
+        {
+            currentEnergy -= energyDrainPerSecond * Time.deltaTime;
+            currentEnergy = Mathf.Max(currentEnergy, 0f);
+            lastSprintTime = Time.time;
+        }
+        else
+        {
+            if (Time.time - lastSprintTime >= regenDelay)
+            {
+                currentEnergy += energyRegenPerSecond * Time.deltaTime;
+                currentEnergy = Mathf.Min(currentEnergy, maxEnergy);
+            }
+        }
+
+        UpdateEnergyUI();
+    }
+
+    void UpdateEnergyUI()
+    {
+        if (energyFillImage != null)
+        {
+            energyFillImage.fillAmount = currentEnergy / maxEnergy;
+        }
+    }
+
+
 
     void FixedUpdate()
     {
@@ -66,7 +120,10 @@ public class TopDownController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
 
         moveDirection = new Vector3(horizontal, 0f, vertical).normalized;
-        isSprinting = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+        isSprinting = (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+              && moveDirection.magnitude > 0.1f
+              && currentEnergy > 0f;
+
 
         // Jump input (Space bar)
         if (Input.GetKeyDown(KeyCode.Space))
@@ -174,6 +231,18 @@ public class TopDownController : MonoBehaviour
         if (!rayDidHit && !canJumpInAir)
             return;
 
+        // Check if enough energy to jump
+        if (currentEnergy < jumpEnergyCost)
+            return; // not enough energy
+
+        // Deduct energy instantly
+        currentEnergy -= jumpEnergyCost;
+        currentEnergy = Mathf.Max(currentEnergy, 0f);
+        UpdateEnergyUI();
+
+        // Reset energy regen delay
+        lastSprintTime = Time.time;
+
         // Apply jump force
         if (rb != null)
         {
@@ -181,6 +250,8 @@ public class TopDownController : MonoBehaviour
             lastJumpTime = Time.time;
         }
     }
+
+
 
     // Public getters
     public bool IsGrounded() => rayDidHit;
