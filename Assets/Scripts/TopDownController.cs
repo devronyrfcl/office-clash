@@ -54,6 +54,11 @@ public class TopDownController : MonoBehaviour
     private float lastSprintTime;
 
 
+    //health variables
+    public int maxHealth = 100;
+    public int currentHealth;
+
+
 
     void Start()
     {
@@ -251,6 +256,19 @@ public class TopDownController : MonoBehaviour
         }
     }
 
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(currentHealth, 0);
+        // You can add additional logic here, such as checking for death
+
+        if (currentHealth <= 0)
+        {
+            Debug.Log("Character has died.");
+            // Handle character death (e.g., respawn, game over, etc.)
+        }
+    }
 
 
     // Public getters
