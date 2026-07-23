@@ -115,12 +115,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             cinemachineVirtualCamera.m_Follow = transform;
             cinemachineVirtualCamera.m_LookAt = transform;
 
-            Ulits.Debug("Spawned Local Player with input authority");
+            Utils.DebugLog("Spawned Local Player with input authority");
 
         }
         else
         {
-            Ulits.Debug("Spawned Remote Player without input authority");
+            Utils.DebugLog("Spawned Remote Player without input authority");
         }
 
         transform.name = $"P_{Object.Id}";

@@ -54,13 +54,13 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
     {
         if(runner.IsServer)
         {
-            Ulits.Debug($"Player joined: {player.PlayerId}");
-            
+            Utils.DebugLog($"Player joined: {player.PlayerId}");
+
             runner.Spawn(networkPlayerPrefab, Vector3.zero, Quaternion.identity, player);
         }
         else
         {
-            Ulits.Debug($"Player joined: {player.PlayerId}");
+            Utils.DebugLog($"Player joined: {player.PlayerId}");
         }
     }
 
