@@ -1,8 +1,13 @@
 using UnityEngine;
+using System.Collections;
+using Fusion;
+using Cinemachine;
 
-public class NetworkPlayer : MonoBehaviour
+public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
 
+    public static NetworkPlayer Local { get; set; }
+    
     [SerializeField] Rigidbody rigidbody3D;
 
     [SerializeField] ConfigurableJoint mainJoint;
@@ -19,6 +24,9 @@ public class NetworkPlayer : MonoBehaviour
     [SerializeField] private SyncPhysicsObject[] syncPhysicsObjects;
 
     [SerializeField] private Animator animator;
+
+    //Cinemachine
+    CinemachineVirtualCamera cinemachineVirtualCamera;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -95,5 +103,31 @@ public class NetworkPlayer : MonoBehaviour
                 Debug.Log("Updating joint animation for " + syncPhysicsObjects[i].gameObject.name);
             }
         }
+    }
+
+    public override void Spawned()
+    {
+        if(Object.HasInputAuthority)
+        {
+            Local = this;
+
+            cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+            cinemachineVirtualCamera.m_Follow = transform;
+            cinemachineVirtualCamera.m_LookAt = transform;
+
+            Ulits.Debug("Spawned Local Player with input authority");
+
+        }
+        else
+        {
+            Ulits.Debug("Spawned Remote Player without input authority");
+        }
+
+        transform.name = $"P_{Object.Id}";
+    }
+
+    public void PlayerLeft(PlayerRef player)
+    {
+        
     }
 }
