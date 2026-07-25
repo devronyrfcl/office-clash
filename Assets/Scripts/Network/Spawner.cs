@@ -36,6 +36,10 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        if(NetworkPlayer.Local != null)
+            input.Set(NetworkPlayer.Local.GetNetworkInput());
+            
+        
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)

@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 667819893956433285}
   - component: {fileID: 7020703760268737375}
+  - component: {fileID: 7488466272857113609}
+  - component: {fileID: 6217481737771394171}
   m_Layer: 0
   m_Name: Network Runner Prefab
   m_TagString: Untagged
@@ -44,3 +46,34 @@ MonoBehaviour:
   m_Script: {fileID: -1199893898, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Fusion.Runtime.dll::Fusion.NetworkRunner
+--- !u!114 &7488466272857113609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3490871653093461344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4da17315a30db4c6fbd9ec9fc0827eb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Spawner
+  networkPlayerPrefab: {fileID: 6950750546891881754, guid: 03467a14df3c44e429b91ab9b07a22e8,
+    type: 3}
+--- !u!114 &6217481737771394171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3490871653093461344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b5a1ff9dee264bfd829a39e6542dcbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fusion.Addons.Physics::Fusion.Addons.Physics.RunnerSimulatePhysics3D
+  _physicsAuthority: 2
+  _physicsTiming: 3
+  ClientPhysicsSimulation: 0
+  DeltaTimeMultiplier: 1
+  SetUnityFixedTimestep: 0

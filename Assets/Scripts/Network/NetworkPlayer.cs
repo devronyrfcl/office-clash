@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Fusion;
 using Cinemachine;
+using Fusion.Addons.Physics;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
@@ -9,6 +10,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public static NetworkPlayer Local { get; set; }
     
     [SerializeField] Rigidbody rigidbody3D;
+
+    [SerializeField] NetworkRigidbody3D networkRigidbody3D;
 
     [SerializeField] ConfigurableJoint mainJoint;
 
@@ -27,6 +30,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     //Cinemachine
     CinemachineVirtualCamera cinemachineVirtualCamera;
+
+    CinemachineBrain cinemachineBrain;
+
+    //Networked array to store the rotations of the sync physics objects
+    [Networked, Capacity(10)] public NetworkArray<Quaternion> networkPhysicsSyncedRotations { get; }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -51,58 +59,118 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     }
 
 
-    void FixedUpdate()
+    public override void FixedUpdateNetwork()
     {
-        isGrounded = false;
-        int numberOfHits = Physics.SphereCastNonAlloc(transform.position, 0.1f, transform.up * -1f, raycastHits, 0.5f);
-
-        for (int i = 0; i < numberOfHits; i++)
+        
+        Vector3 localVelocityForward = Vector3.zero;
+        float localForwardVelocity = 0f;
+        
+        if(Object.HasInputAuthority)
         {
-            //ignore self hits
-            if (raycastHits[i].collider.gameObject == gameObject)
-                continue;
+            //Assume that we are not grounded
+            isGrounded = false;
 
-            isGrounded = true;
-            break;
+            //Check if we are grounded
+            int numberOfHits = Physics.SphereCastNonAlloc(transform.position, 0.1f, transform.up * -1f, raycastHits, 0.5f);
+
+            for (int i = 0; i < numberOfHits; i++)
+            {
+                //ignore self hits
+                if (raycastHits[i].collider.gameObject == gameObject)
+                    continue;
+
+                isGrounded = true;
+                break;
+            }
+
+            //apply extra gravity to character to make it less floaty
+            if(!isGrounded)
+                rigidbody3D.AddForce(Vector3.down * 10f);
+
+            
+            localVelocityForward = transform.forward * Vector3.Dot(transform.forward, rigidbody3D.linearVelocity);
+            localForwardVelocity = localVelocityForward.magnitude;
+
+            
         }
-
-        //apply extra gravity to character to make it less floaty
-        if(!isGrounded)
-            rigidbody3D.AddForce(Vector3.down * 10f);
-
-        float inputMagnitude = moveInputVector.magnitude;
-
-        Vector3 localVelocityForward = transform.forward * Vector3.Dot(transform.forward, rigidbody3D.linearVelocity);
-
-        float localForwardVelocity = localVelocityForward.magnitude;
-
-        if (inputMagnitude != 0f)
+        
+        if(GetInput(out NetworkInputData networkInputData))
         {
-            Quaternion desireDirection = Quaternion.LookRotation(new Vector3(moveInputVector.x, 0f, moveInputVector.y * -1f), transform.up);
-            mainJoint.targetRotation = Quaternion.RotateTowards(mainJoint.targetRotation, desireDirection, 300f * Time.fixedDeltaTime);
+            float inputMagnitude = networkInputData.movementInput.magnitude;
 
             
 
-            if (localForwardVelocity < maxSpeed)
+            if (inputMagnitude != 0f)
             {
-                rigidbody3D.AddForce(transform.forward * inputMagnitude * 30f);
+                Quaternion desireDirection = Quaternion.LookRotation(new Vector3(networkInputData.movementInput.x, 0f, networkInputData.movementInput.y * -1f), transform.up);
+
+                mainJoint.targetRotation = Quaternion.RotateTowards(mainJoint.targetRotation, desireDirection, Runner.DeltaTime * 300f);
+
+                
+
+                if (localForwardVelocity < maxSpeed)
+                {
+                    rigidbody3D.AddForce(transform.forward * inputMagnitude * 30f);
+                }
+
+                
             }
 
-            if (isJumpButtonPressed && isGrounded)
+            if (networkInputData.isJumpPressed && isGrounded)
             {
                 rigidbody3D.AddForce(transform.up * 20f, ForceMode.Impulse);
                 isJumpButtonPressed = false;
             }
+        }
 
-            animator.SetFloat("movementSpeed", localForwardVelocity * 0.9f);
+        if(Object.HasStateAuthority)
+        {
+            animator.SetFloat("movementSpeed", localForwardVelocity * 0.4f);
 
             //update the joint rotation based on the animation
             for (int i = 0; i < syncPhysicsObjects.Length; i++)
             {
                 syncPhysicsObjects[i].UpdateJointAnimation();
-                Debug.Log("Updating joint animation for " + syncPhysicsObjects[i].gameObject.name);
+                networkPhysicsSyncedRotations.Set(i, syncPhysicsObjects[i].transform.localRotation);
+            }
+
+            if(transform.position.y < -10f)
+                networkRigidbody3D.Teleport(Vector3.zero, Quaternion.identity);
+        }
+    }
+
+    public override void Render()
+    {
+        if(!Object.HasStateAuthority)
+        {
+            var interpolated = new NetworkBehaviourBufferInterpolator(this);
+
+            //Get the networked physics object from the host and updae the clients
+            for(int i = 0; i < syncPhysicsObjects.Length; i++)
+            {
+                syncPhysicsObjects[i].transform.localRotation = Quaternion.Slerp(syncPhysicsObjects[i].transform.localRotation, networkPhysicsSyncedRotations.Get(i), interpolated.Alpha);
             }
         }
+
+        if (Object.HasInputAuthority)
+        {
+            cinemachineBrain.ManualUpdate();
+            cinemachineVirtualCamera.UpdateCameraState(Vector3.up, Runner.LocalAlpha);
+        }
+    }
+
+    public NetworkInputData GetNetworkInput()
+    {
+        NetworkInputData networkInputData = new NetworkInputData();
+
+        networkInputData.movementInput = moveInputVector;
+
+        if(isJumpButtonPressed)
+            networkInputData.isJumpPressed = true;
+
+        isJumpButtonPressed = false;
+
+        return networkInputData;
     }
 
     public override void Spawned()
@@ -112,6 +180,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Local = this;
 
             cinemachineVirtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+            cinemachineBrain = FindObjectOfType<CinemachineBrain>();
+
             cinemachineVirtualCamera.m_Follow = transform;
             cinemachineVirtualCamera.m_LookAt = transform;
 
@@ -128,6 +198,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public void PlayerLeft(PlayerRef player)
     {
-        
+        if(Object.InputAuthority == player)
+            Runner.Despawn(Object);
     }
 }
