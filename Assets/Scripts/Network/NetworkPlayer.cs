@@ -20,6 +20,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public float maxSpeed = 2f;
 
     bool isGrounded = false;
+    bool isActiveRagdoll = true;
     bool isJumpButtonPressed = false;
 
     RaycastHit[] raycastHits = new RaycastHit[10];
@@ -35,6 +36,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     //Networked array to store the rotations of the sync physics objects
     [Networked, Capacity(10)] public NetworkArray<Quaternion> networkPhysicsSyncedRotations { get; }
+
+    [Networked] public float networkedMovementSpeed { get; set; }
+
+    float startSlerpPositionSpring;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -65,7 +70,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         Vector3 localVelocityForward = Vector3.zero;
         float localForwardVelocity = 0f;
         
-        if(Object.HasInputAuthority)
+        if(Object.HasInputAuthority || Object.HasStateAuthority)
         {
             //Assume that we are not grounded
             isGrounded = false;
@@ -125,7 +130,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
         if(Object.HasStateAuthority)
         {
-            animator.SetFloat("movementSpeed", localForwardVelocity * 0.4f);
+            networkedMovementSpeed = localForwardVelocity * 0.4f;
 
             //update the joint rotation based on the animation
             for (int i = 0; i < syncPhysicsObjects.Length; i++)
@@ -141,6 +146,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public override void Render()
     {
+        animator.SetFloat("movementSpeed", networkedMovementSpeed);
+
         if(!Object.HasStateAuthority)
         {
             var interpolated = new NetworkBehaviourBufferInterpolator(this);
