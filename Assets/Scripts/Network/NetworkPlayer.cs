@@ -21,7 +21,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     bool isGrounded = false;
     bool isActiveRagdoll = true;
+
+    public bool IsActiveRagdoll  => isActiveRagdoll;
     bool isJumpButtonPressed = false;
+    bool isReviveButtonPressed = false;
 
     RaycastHit[] raycastHits = new RaycastHit[10];
 
@@ -39,8 +42,16 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     [Networked] public float networkedMovementSpeed { get; set; }
 
-    float startSlerpPositionSpring;
+    float startSlerpPositionSpring = 0.0f;
+    float lastTimeBecameRagdoll = 0.0f;
 
+    
+    
+    void Start()
+    {
+        startSlerpPositionSpring = mainJoint.slerpDrive.positionSpring;
+    }
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -61,6 +72,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
         if(Input.GetKeyDown(KeyCode.Space))
                 isJumpButtonPressed = true;
+
+        if(Input.GetKeyDown(KeyCode.R))
+                isReviveButtonPressed = true;
+
     }
 
 
@@ -103,29 +118,42 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         {
             float inputMagnitude = networkInputData.movementInput.magnitude;
 
+            if(isActiveRagdoll)
+            {
+                if (inputMagnitude != 0f)
+                {
+                    Quaternion desireDirection = Quaternion.LookRotation(new Vector3(networkInputData.movementInput.x, 0f, networkInputData.movementInput.y * -1f), transform.up);
+
+                    mainJoint.targetRotation = Quaternion.RotateTowards(mainJoint.targetRotation, desireDirection, Runner.DeltaTime * 300f);
+
+                    
+
+                    if (localForwardVelocity < maxSpeed)
+                    {
+                        rigidbody3D.AddForce(transform.forward * inputMagnitude * 30f);
+                    }
+
+                    
+                }
+                if (networkInputData.isJumpPressed && isGrounded)
+                {
+                    rigidbody3D.AddForce(transform.up * 20f, ForceMode.Impulse);
+                    isJumpButtonPressed = false;
+                }
+            }
+            else
+            {
+                if(networkInputData.isRevivePressed && Runner.SimulationTime - lastTimeBecameRagdoll > 3f)
+                {
+                    MakeActiveRagdoll();
+                    isReviveButtonPressed = false;
+                }
+                
+            }
+
             
 
-            if (inputMagnitude != 0f)
-            {
-                Quaternion desireDirection = Quaternion.LookRotation(new Vector3(networkInputData.movementInput.x, 0f, networkInputData.movementInput.y * -1f), transform.up);
-
-                mainJoint.targetRotation = Quaternion.RotateTowards(mainJoint.targetRotation, desireDirection, Runner.DeltaTime * 300f);
-
-                
-
-                if (localForwardVelocity < maxSpeed)
-                {
-                    rigidbody3D.AddForce(transform.forward * inputMagnitude * 30f);
-                }
-
-                
-            }
-
-            if (networkInputData.isJumpPressed && isGrounded)
-            {
-                rigidbody3D.AddForce(transform.up * 20f, ForceMode.Impulse);
-                isJumpButtonPressed = false;
-            }
+            
         }
 
         if(Object.HasStateAuthority)
@@ -140,7 +168,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             }
 
             if(transform.position.y < -10f)
+            {
                 networkRigidbody3D.Teleport(Vector3.zero, Quaternion.identity);
+                MakeActiveRagdoll();
+            }
+                
         }
     }
 
@@ -175,10 +207,73 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         if(isJumpButtonPressed)
             networkInputData.isJumpPressed = true;
 
+        if(isReviveButtonPressed)
+            networkInputData.isRevivePressed = true;
+
         isJumpButtonPressed = false;
+        isReviveButtonPressed = false;
 
         return networkInputData;
     }
+
+    void MakeRegdoll()
+    {
+        if(!Object.HasStateAuthority)
+            return;
+
+           
+        //Update the joints rotation and send them to clients
+        JointDrive jointDrive = mainJoint.slerpDrive;
+        jointDrive.positionSpring = 0f;
+        mainJoint.slerpDrive = jointDrive;
+
+        for (int i = 0; i < syncPhysicsObjects.Length; i++)
+        {
+            syncPhysicsObjects[i].MakeRagdoll();
+            
+        }
+
+        lastTimeBecameRagdoll = Runner.SimulationTime;
+        
+        isActiveRagdoll = false; 
+    }
+
+    public void OnPlayerBodyPartHit()
+    {
+        if(!IsActiveRagdoll)
+            return;
+
+        MakeRegdoll();
+    }
+
+    void MakeActiveRagdoll()
+    {
+        if(!Object.HasStateAuthority)
+            return;
+
+        
+        //Update Main Joint Drive to the original value
+        JointDrive jointDrive = mainJoint.slerpDrive;
+        jointDrive.positionSpring = startSlerpPositionSpring;
+        mainJoint.slerpDrive = jointDrive; 
+
+        //Update the joints rotation and send them to clients
+        for (int i = 0; i < syncPhysicsObjects.Length; i++)
+        {
+            syncPhysicsObjects[i].MakeActiveRagdoll();
+            
+        }
+
+        isActiveRagdoll = true; 
+    }
+
+    /*void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("CauseDamage"))
+            MakeRegdoll();
+
+        
+    }*/
 
     public override void Spawned()
     {

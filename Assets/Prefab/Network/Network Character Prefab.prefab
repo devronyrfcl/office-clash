@@ -224,6 +224,8 @@ MonoBehaviour:
   maxSpeed: 3
   syncPhysicsObjects: []
   animator: {fileID: 1116014814359399748}
+  _networkPhysicsSyncedRotations: []
+  _networkedMovementSpeed: 0
 --- !u!114 &8517094462783036022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -458,6 +460,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1572512616439865917}
+    - targetCorrespondingSourceObject: {fileID: 2870523794981691266, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2561101830541422502}
     - targetCorrespondingSourceObject: {fileID: 4700718891997078985, guid: a2ac7133c7d674fc8961630ea7bb1339,
         type: 3}
       insertIndex: -1
@@ -474,6 +480,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3606932339567152176}
+    - targetCorrespondingSourceObject: {fileID: 4700718891997078985, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4024016193478040999}
     - targetCorrespondingSourceObject: {fileID: 7354008096416770832, guid: a2ac7133c7d674fc8961630ea7bb1339,
         type: 3}
       insertIndex: -1
@@ -711,6 +721,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SyncPhysicsObject
   animatedRigidbody3D: {fileID: 8362615851397242734}
   syncAnimation: 1
+--- !u!114 &2561101830541422502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998440616478131760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20a23045dd9d844788968957827466f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DetectCollision
 --- !u!4 &4316555608609898073 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a2ac7133c7d674fc8961630ea7bb1339,
@@ -1575,6 +1597,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SyncPhysicsObject
   animatedRigidbody3D: {fileID: 4351480381357346770}
   syncAnimation: 1
+--- !u!114 &4024016193478040999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9030152541448502395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20a23045dd9d844788968957827466f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DetectCollision
 --- !u!1001 &8978825225427309603
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ public class SyncPhysicsObject : MonoBehaviour
     [SerializeField] bool syncAnimation = false;
 
     Quaternion startLocalRotation;
+
+    float startSlerpPositionSpring = 0.0f;
     
 
     void Awake()
@@ -21,6 +23,8 @@ public class SyncPhysicsObject : MonoBehaviour
         joint = GetComponent<ConfigurableJoint>();
 
         startLocalRotation = transform.localRotation;
+
+        startSlerpPositionSpring = joint.slerpDrive.positionSpring;
     }
 
     public void UpdateJointAnimation()
@@ -29,6 +33,21 @@ public class SyncPhysicsObject : MonoBehaviour
             return;
 
         ConfigurableJointExtensions.SetTargetRotationLocal(joint, animatedRigidbody3D.transform.localRotation, startLocalRotation);
+    }
+
+    public void MakeRagdoll()
+    {
+        JointDrive jointDrive = joint.slerpDrive;
+        jointDrive.positionSpring = 1f;
+        joint.slerpDrive = jointDrive;
+
+    }
+
+    public void MakeActiveRagdoll()
+    {
+        JointDrive jointDrive = joint.slerpDrive;
+        jointDrive.positionSpring = startSlerpPositionSpring;
+        joint.slerpDrive = jointDrive;
     }
 
 
