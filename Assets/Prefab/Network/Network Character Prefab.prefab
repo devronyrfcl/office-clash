@@ -283,12 +283,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Fusion.Runtime.dll::Fusion.NetworkObject
   SortKey: 534154925
-  ObjectInterest: 1
-  Flags: 262145
+  SendPriority: 1
+  EnableInterpolation: 1
+  Flags: 262402
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 6950750546891881754}
   - {fileID: 7797588904958774417}
+  - {fileID: 6950750546891881754}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &7797588904958774417
 MonoBehaviour:
