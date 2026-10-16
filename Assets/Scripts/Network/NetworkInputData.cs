@@ -1,11 +1,16 @@
 using Fusion;
 using UnityEngine;
 
+public enum InputButton
+{
+    Jump,
+    Revive,
+    Grab,
+    Throw
+}
+
 public struct NetworkInputData : INetworkInput
 {
     public Vector2 movementInput;
-    public NetworkBool isJumpPressed;
-    public NetworkBool isRevivePressed;
-    public NetworkBool isGrabPressed;
-    public NetworkBool isThrowHeld;
+    public NetworkButtons buttons;
 }

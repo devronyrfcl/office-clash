@@ -28,9 +28,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public float maxSpeed = 2f;
 
     bool isGrounded = false;
-    bool isActiveRagdoll = true;
 
-    public bool IsActiveRagdoll  => isActiveRagdoll;
+    public bool IsActiveRagdoll  => !isKnockedDown;
+
+    [SerializeField] float minRagdollTime = 3f;
+
+    //Set from Update and cleared when the input is sent, so short taps between ticks are not lost
     bool isJumpButtonPressed = false;
     bool isReviveButtonPressed = false;
     bool isGrabButtonPressed = false;
@@ -77,8 +80,14 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [Networked] public byte heldHandIndex { get; set; }
     [Networked] public NetworkId heldObjectId { get; set; }
 
+    //Knockdown state, decided by the host
+    [Networked] public NetworkBool isKnockedDown { get; set; }
+    [Networked] public TickTimer getUpTimer { get; set; }
+
+    //Buttons from the last input, used to find which ones were just pressed
+    [Networked] NetworkButtons previousButtons { get; set; }
+
     //Only used by the host
-    bool wasThrowHeld = false;
     bool hasReleasedThrow = false;
     float swingTimer = 0f;
     float windupSign = 1f;
@@ -86,7 +95,6 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     Vector3 swingThrowVelocity = Vector3.zero;
 
     float startSlerpPositionSpring = 0.0f;
-    float lastTimeBecameRagdoll = 0.0f;
 
     
     
@@ -115,16 +123,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         moveInputVector.x = Input.GetAxis("Horizontal");
         moveInputVector.y = Input.GetAxis("Vertical");
 
-        if(Input.GetKeyDown(KeyCode.Space))
-                isJumpButtonPressed = true;
-
-        if(Input.GetKeyDown(KeyCode.R))
-                isReviveButtonPressed = true;
-
-        if(Input.GetKeyDown(KeyCode.G))
-                isGrabButtonPressed = true;
-
-        isThrowButtonHeld = Input.GetKey(KeyCode.F);
+        isJumpButtonPressed |= Input.GetKey(KeyCode.Space);
+        isReviveButtonPressed |= Input.GetKey(KeyCode.R);
+        isGrabButtonPressed |= Input.GetKey(KeyCode.G);
+        isThrowButtonHeld |= Input.GetKey(KeyCode.F);
 
     }
 
@@ -166,11 +168,17 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         
         bool hasInput = GetInput(out NetworkInputData networkInputData);
 
+        //Without input nothing is pressed and held buttons stay as they were
+        NetworkButtons buttons = hasInput ? networkInputData.buttons : previousButtons;
+        NetworkButtons pressedButtons = buttons.GetPressed(previousButtons);
+
+        previousButtons = buttons;
+
         if(hasInput)
         {
             float inputMagnitude = networkInputData.movementInput.magnitude;
 
-            if(isActiveRagdoll)
+            if(!isKnockedDown)
             {
                 if (inputMagnitude != 0f)
                 {
@@ -187,18 +195,16 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
                     
                 }
-                if (networkInputData.isJumpPressed && isGrounded)
+                if (pressedButtons.IsSet(InputButton.Jump) && isGrounded)
                 {
                     rigidbody3D.AddForce(transform.up * 20f, ForceMode.Impulse);
-                    isJumpButtonPressed = false;
                 }
             }
             else
             {
-                if(networkInputData.isRevivePressed && Runner.SimulationTime - lastTimeBecameRagdoll > 3f)
+                if(pressedButtons.IsSet(InputButton.Revive) && getUpTimer.ExpiredOrNotRunning(Runner))
                 {
                     MakeActiveRagdoll();
-                    isReviveButtonPressed = false;
                 }
                 
             }
@@ -212,7 +218,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         {
             networkedMovementSpeed = localForwardVelocity * 0.4f;
 
-            UpdateGrab(hasInput, networkInputData);
+            UpdateGrab(pressedButtons.IsSet(InputButton.Grab), buttons.IsSet(InputButton.Throw), pressedButtons.IsSet(InputButton.Throw));
 
             //update the joint rotation based on the animation
             for (int i = 0; i < syncPhysicsObjects.Length; i++)
@@ -223,7 +229,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             if(transform.position.y < -10f)
             {
-                networkRigidbody3D.Teleport(Vector3.zero, Quaternion.identity);
+                Transform spawnPoint = SpawnPoint.PickRandom();
+
+                if(spawnPoint != null)
+                    networkRigidbody3D.Teleport(spawnPoint.position, spawnPoint.rotation);
+                else
+                    networkRigidbody3D.Teleport(Vector3.zero, Quaternion.identity);
+
                 MakeActiveRagdoll();
             }
                 
@@ -263,20 +275,16 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
         networkInputData.movementInput = moveInputVector;
 
-        if(isJumpButtonPressed)
-            networkInputData.isJumpPressed = true;
-
-        if(isReviveButtonPressed)
-            networkInputData.isRevivePressed = true;
-
-        if(isGrabButtonPressed)
-            networkInputData.isGrabPressed = true;
-
-        networkInputData.isThrowHeld = isThrowButtonHeld;
+        //Also check the keys right now, otherwise a held key looks released when there are more ticks than frames
+        networkInputData.buttons.Set(InputButton.Jump, isJumpButtonPressed || Input.GetKey(KeyCode.Space));
+        networkInputData.buttons.Set(InputButton.Revive, isReviveButtonPressed || Input.GetKey(KeyCode.R));
+        networkInputData.buttons.Set(InputButton.Grab, isGrabButtonPressed || Input.GetKey(KeyCode.G));
+        networkInputData.buttons.Set(InputButton.Throw, isThrowButtonHeld || Input.GetKey(KeyCode.F));
 
         isJumpButtonPressed = false;
         isReviveButtonPressed = false;
         isGrabButtonPressed = false;
+        isThrowButtonHeld = false;
 
         return networkInputData;
     }
@@ -299,9 +307,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             
         }
 
-        lastTimeBecameRagdoll = Runner.SimulationTime;
-        
-        isActiveRagdoll = false; 
+        getUpTimer = TickTimer.CreateFromSeconds(Runner, minRagdollTime);
+
+        isKnockedDown = true;
     }
 
     public void OnPlayerBodyPartHit()
@@ -332,7 +340,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             
         }
 
-        isActiveRagdoll = true; 
+        getUpTimer = TickTimer.None;
+
+        isKnockedDown = false;
     }
 
     /*void OnCollisionEnter(Collision collision)
@@ -347,20 +357,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public bool IsChargingThrow => grabState == GrabState.Charging;
 
-    void UpdateGrab(bool hasInput, NetworkInputData networkInputData)
+    void UpdateGrab(bool isGrabPressed, bool isThrowHeld, bool isThrowStarted)
     {
-        //Without input the grab button is not pressed and the throw button stays as it was
-        bool isGrabPressed = hasInput && networkInputData.isGrabPressed;
-        bool isThrowHeld = hasInput ? (bool)networkInputData.isThrowHeld : wasThrowHeld;
-
-        bool isThrowStarted = isThrowHeld && !wasThrowHeld;
-
-        wasThrowHeld = isThrowHeld;
-
         switch (grabState)
         {
             case GrabState.None:
-                if(isGrabPressed && isActiveRagdoll)
+                if(isGrabPressed && !isKnockedDown)
                     TryGrabObject();
                 break;
 

@@ -9,6 +9,8 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
 {
     
     [SerializeField] NetworkPlayer networkPlayerPrefab;
+
+    [SerializeField] float fallbackSpawnRadius = 3f;
     
     public void OnConnectedToServer(NetworkRunner runner)
     {
@@ -60,12 +62,32 @@ public class Spawner : SimulationBehaviour, INetworkRunnerCallbacks
         {
             Utils.DebugLog($"Player joined: {player.PlayerId}");
 
-            runner.Spawn(networkPlayerPrefab, Vector3.zero, Quaternion.identity, player);
+            GetSpawnPose(player, out Vector3 position, out Quaternion rotation);
+
+            runner.Spawn(networkPlayerPrefab, position, rotation, player);
         }
         else
         {
             Utils.DebugLog($"Player joined: {player.PlayerId}");
         }
+    }
+
+    //Each player gets their own spawn point, without any the players are spread in a circle
+    void GetSpawnPose(PlayerRef player, out Vector3 position, out Quaternion rotation)
+    {
+        Transform spawnPoint = SpawnPoint.Get(player.PlayerId);
+
+        if(spawnPoint != null)
+        {
+            position = spawnPoint.position;
+            rotation = spawnPoint.rotation;
+            return;
+        }
+
+        float angle = player.PlayerId * 36f;
+
+        position = Quaternion.Euler(0f, angle, 0f) * Vector3.forward * fallbackSpawnRadius;
+        rotation = Quaternion.LookRotation(-position.normalized, Vector3.up);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)

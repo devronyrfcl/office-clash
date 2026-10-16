@@ -11,6 +11,14 @@ public class NetworkRunnerHandler : MonoBehaviour
     [SerializeField] private NetworkRunner networkRunnerPrefab;
     private NetworkRunner networkRunner;
 
+    [Header("Session")]
+    [SerializeField] private GameMode gameMode = GameMode.AutoHostOrClient;
+
+    //Leave empty to join any open match (quick match), or set a name to join a specific room
+    [SerializeField] private string sessionName = "";
+
+    [SerializeField] private int maxPlayers = 10;
+
 
     void Awake()
     {
@@ -26,9 +34,21 @@ public class NetworkRunnerHandler : MonoBehaviour
             networkRunner.name = "Network Runner";
         }
 
-        var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, "TestSeasom", NetAddress.Any(), SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex), null);
+        StartSession();
+    }
 
-        Utils.DebugLog("Initializing Network Runner called.");
+    async void StartSession()
+    {
+        string session = string.IsNullOrWhiteSpace(sessionName) ? null : sessionName;
+
+        Utils.DebugLog($"Starting {gameMode} in session {session ?? "(quick match)"}");
+
+        StartGameResult result = await InitializeNetworkRunner(networkRunner, gameMode, session, NetAddress.Any(), SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex), null);
+
+        if(result.Ok)
+            Utils.DebugLog($"Joined session {networkRunner.SessionInfo.Name} as {networkRunner.GameMode}");
+        else
+            Utils.DebugLogError($"Failed to start session: {result.ShutdownReason} {result.ErrorMessage}");
     }
 
     INetworkSceneManager GetSceneManager(NetworkRunner runner)
@@ -42,7 +62,7 @@ public class NetworkRunnerHandler : MonoBehaviour
         return sceneManager;
     }
 
-    protected virtual Task InitializeNetworkRunner(NetworkRunner networkRunner, GameMode gameMode, string sessionName, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized)
+    protected virtual Task<StartGameResult> InitializeNetworkRunner(NetworkRunner networkRunner, GameMode gameMode, string sessionName, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized)
     {
         INetworkSceneManager sceneManager = GetSceneManager(networkRunner);
 
@@ -54,6 +74,7 @@ public class NetworkRunnerHandler : MonoBehaviour
             Address = address,
             Scene = scene,
             SessionName = sessionName,
+            PlayerCount = maxPlayers,
             CustomLobbyName = "OurLobbyID",
             SceneManager = sceneManager,
         });
