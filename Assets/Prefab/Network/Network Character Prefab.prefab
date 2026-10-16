@@ -359,6 +359,7 @@ GameObject:
   - component: {fileID: 9044383408594379332}
   - component: {fileID: 188147119332501648}
   - component: {fileID: 4097339679666360231}
+  - component: {fileID: 9200900325354528288}
   m_Layer: 0
   m_Name: GrabPoint
   m_TagString: Untagged
@@ -531,6 +532,39 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &9200900325354528288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6897061807021341677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df4308a52ff93484aa26de5b69b1fecd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HandGrabHandler
+  animator: {fileID: 1116014814359399748}
+  grabRange: 1.5
+  pullSpeed: 10
+  maxPullVelocity: 15
+  minPullVelocity: 2
+  attachDistance: 0.25
+  throwSpeed: 12
+  throwUpAngle: 25
+  handVelocityInfluence: 0.5
+  readyAngle: -80
+  windUpAngle: -200
+  releaseAngle: -90
+  followThroughAngle: -30
+  readyTime: 0.2
+  windUpTime: 0.2
+  swingTime: 0.18
+  recoverTime: 0.35
+  minForwardOffset: 0.15
+  ignoreBodyTime: 0.4
+  armSpring: 600
+  armDamper: 30
 --- !u!1 &7081471708816746606
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,6 +608,7 @@ GameObject:
   - component: {fileID: 5068893651030904895}
   - component: {fileID: 1750018456576989915}
   - component: {fileID: 2233297798406281619}
+  - component: {fileID: 3073836757594754586}
   m_Layer: 0
   m_Name: GrabPoint
   m_TagString: Untagged
@@ -746,6 +781,39 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &3073836757594754586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8774674039404900867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df4308a52ff93484aa26de5b69b1fecd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HandGrabHandler
+  animator: {fileID: 1116014814359399748}
+  grabRange: 1.5
+  pullSpeed: 10
+  maxPullVelocity: 15
+  minPullVelocity: 2
+  attachDistance: 0.25
+  throwSpeed: 12
+  throwUpAngle: 25
+  handVelocityInfluence: 0.5
+  readyAngle: -80
+  windUpAngle: -200
+  releaseAngle: -90
+  followThroughAngle: -30
+  readyTime: 0.2
+  windUpTime: 0.2
+  swingTime: 0.18
+  recoverTime: 0.35
+  minForwardOffset: 0.15
+  ignoreBodyTime: 0.4
+  armSpring: 600
+  armDamper: 30
 --- !u!1001 &4354353060518353330
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -808,6 +876,66 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Knight
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397162098512366591, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 3.0718427e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397162098512366591, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -1.2558728e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397162098512366591, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.5676766
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397162098512366591, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.82325166
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397162098512366591, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -69.177
+      objectReference: {fileID: 0}
+    - target: {fileID: 7397162098512366591, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052791189861519797, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 3.0718427e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052791189861519797, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -1.2558728e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052791189861519797, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.5676766
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052791189861519797, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.82325166
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052791189861519797, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -69.177
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052791189861519797, guid: a2ac7133c7d674fc8961630ea7bb1339,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
