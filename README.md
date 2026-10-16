@@ -14,7 +14,7 @@
 | Play | **Online only** |
 | Platform | **Mobile: Google Play Store + Apple App Store** |
 | Match hosting | **Client-host** (one phone hosts) for the prototype, **Fusion dedicated server** before launch |
-| Backend | **Supabase** for accounts and player data (one company account across all our games), **Photon Fusion** for realtime gameplay |
+| Backend | **PlayFab** for accounts, player data, economy and stats, **Photon Fusion** for realtime gameplay |
 | Monetization | **Free + cosmetics + ads** |
 | Falling off the map | **Always goes through HP.** Heavy damage + respawn, never an instant elimination |
 | Shrinking office | **Yes** |
@@ -144,7 +144,7 @@ With 10 players, rounds need a push toward the end. After 90 s, sections of the 
 
 ### Networking
 - The current code is **client-hosted** (one phone acts as the host). With 10 mobile players, the host phone does all the physics and is a single point of failure (if it backgrounds or drops, the match dies).
-- **Decided:** client-host for the prototype (Milestones 0–3), then a **Fusion dedicated server** (headless Linux build in the cloud) for launch. Supabase handles accounts and data; it doesn't run the match.
+- **Decided:** client-host for the prototype (Milestones 0–3), then a **Fusion dedicated server** (headless Linux build) for launch, hosted on **PlayFab Multiplayer Servers**. PlayFab also handles accounts and data; Fusion runs the match itself.
 - Keep gameplay code authority-agnostic (`HasStateAuthority`, not "is a player") so the switch to a server is mostly a build/config change.
 - Matchmaking: a Quick Match that joins any open session with fewer than 10 players, or creates one. A private room code for playing with friends.
 
@@ -154,28 +154,30 @@ With 10 players, rounds need a push toward the end. After 90 s, sections of the 
 - iOS: handle the app being backgrounded mid-match (reconnect or forfeit)
 - Ads and accounts mean extra store work: Apple App Tracking Transparency prompt, Google Play Data Safety form, account deletion inside the app (required by both stores)
 
-### Backend: Supabase + Fusion
-Supabase is the company-wide backend: **one account works in every game we release.**
+### Backend: PlayFab + Fusion
+PlayFab is the backend for accounts, player data, economy and stats. Office Clash is its own PlayFab **Title**.
 
-| Supabase | Used for |
+| PlayFab | Used for |
 |---|---|
-| Auth | Sign in with Apple, Google, email, plus guest accounts that can be upgraded later. Required: Sign in with Apple on iOS if any other social login is offered |
-| Postgres (shared schema) | `profiles` (shared across games: username, avatar, level) |
-| Postgres (per-game schema, e.g. `office_clash`) | owned cosmetics, equipped loadout, match history, stats (wins, eliminations, damage) |
-| Edge Functions | Trusted writes: grant match rewards, process purchases (verify App Store / Play receipts), verify ad rewards |
-| Row Level Security | Players can read their own data but never write currency, cosmetics or stats directly |
+| Authentication | Sign in with Apple, Google Play Games, and guest login (`LoginWithCustomID` with a device ID) that can be linked to Apple/Google later. Required: Sign in with Apple on iOS if any other social login is offered |
+| Title player data | Equipped loadout, settings, per-game progress |
+| Economy v2 | Catalog of cosmetics, soft + premium currency, stores, inventory. Receipt redemption for App Store / Google Play purchases |
+| Statistics + Leaderboards | Wins, eliminations, damage, season leaderboards |
+| CloudScript (Azure Functions) | Trusted writes: grant match rewards, verify ad rewards, anything a client must not do by itself |
+| Title settings (API policy) | Block client-side writes to currency, inventory and statistics, so only CloudScript / the server can change them |
+| Multiplayer Servers (later) | Hosting the headless Fusion dedicated server for launch |
+| Title data / Remote config | Tunable values (damage, timers, item spawn rates) without shipping an app update |
 
 How they connect:
-1. Player signs in to Supabase in the app and gets a JWT.
-2. The app passes that JWT to Photon via **Fusion custom authentication**. A Supabase Edge Function validates it and returns the user ID, so every Fusion player is a verified Supabase user.
-3. In the match, the host knows each player's Supabase user ID and equipped cosmetics.
-4. At match end, the host (later: the dedicated server) sends the results to an Edge Function, which writes stats and rewards. A client can't award itself.
+1. Player logs in to PlayFab in the app and gets a session ticket.
+2. The app calls `GetPhotonAuthenticationToken` and passes it to Fusion through **Photon custom authentication** (the built-in PlayFab provider in the Photon dashboard). Every Fusion player is now a verified PlayFab player, and their PlayFab ID is the Photon `UserId`.
+3. In the match, the host knows each player's PlayFab ID and equipped cosmetics (sent with the join, verified against title data later).
+4. At match end, the host (later: the dedicated server) calls a CloudScript function with the results. It writes statistics and grants rewards. A client can't award itself.
 
 ### Monetization: free + cosmetics + ads
 - **Cosmetics:** outfits, ties, hats, glasses, mug skins, throw trails, victory emotes. Purely visual, no pay-to-win.
-- **Currency:** soft currency earned by playing; premium currency or direct purchases through Unity IAP. Receipts verified in an Edge Function before granting items.
+- **Currency:** soft currency earned by playing; premium currency or direct purchases through Unity IAP. Receipts redeemed through PlayFab Economy (Apple / Google receipt validation) before granting items.
 - **Ads:** rewarded ads (double match rewards, free daily cosmetic spin) **(proposal)**. Light interstitials between matches at most, never during a match.
-- Possibly shared across games: an account-level currency or cosmetics usable in several of our games **(to decide later)**.
 
 ## 7. Characters
 - Office worker models, rigged to match the current ragdoll joint setup (the same bone layout as the Knight, so `SyncPhysicsObject` keeps working).
@@ -207,7 +209,7 @@ Hit sounds per item type, cartoony "oof" voice lines, camera shake on big hits, 
 - [ ] Move gameplay to `Office Scene 1` and add it to build settings
 - [ ] Make the office props networked throwables with item data
 - [ ] Get a first Android build running with 2 phones online
-- [ ] Supabase project setup: shared `profiles` schema + `office_clash` schema, guest sign-in from Unity
+- [ ] PlayFab setup: Office Clash title, PlayFab Unity SDK, guest login from Unity, API policy locking client writes
 
 ### Milestone 1: Playable MVP (2–3 weeks)
 - [ ] Networked HP + damage from item hits (with attacker credit)
@@ -217,7 +219,7 @@ Hit sounds per item type, cartoony "oof" voice lines, camera shake on big hits, 
 - [ ] Touch controls (joystick + buttons)
 - [ ] Basic HUD (HP, players left, timer, items)
 - [ ] Quick Match lobby for up to 10
-- [ ] Fusion custom auth through a Supabase Edge Function
+- [ ] Fusion custom auth with PlayFab (`GetPhotonAuthenticationToken`)
 
 ### Milestone 2: Fun + performance (2–3 weeks)
 - [ ] **10-player stress test on real phones.** Profile and add ragdoll/prop LOD
@@ -233,19 +235,18 @@ Hit sounds per item type, cartoony "oof" voice lines, camera shake on big hits, 
 - [ ] Results screen with stats, private room codes
 - [ ] Settings (sensitivity, graphics quality, sound)
 - [ ] Sign in with Apple / Google, guest-account upgrade
-- [ ] Match results + stats written to Supabase via Edge Function
-- [ ] Cosmetics: data model, equip screen, loadout synced into matches
+- [ ] Match results + statistics written to PlayFab via CloudScript, leaderboards
+- [ ] Cosmetics: PlayFab Economy catalog, equip screen, loadout synced into matches
 
 ### Milestone 4: Launch prep
-- [ ] Move from client-host to a Fusion dedicated server (headless Linux build, cloud hosting, `GameMode.Server`)
+- [ ] Move from client-host to a Fusion dedicated server (headless Linux build, `GameMode.Server`) on PlayFab Multiplayer Servers
 - [ ] iOS build, TestFlight + Play Console closed testing
 - [ ] Reconnect / backgrounding handling
 - [ ] Store listings, privacy policy, age rating
-- [ ] Cosmetics shop + Unity IAP with receipt verification in Supabase
+- [ ] Cosmetics shop + Unity IAP with receipt redemption in PlayFab Economy
 - [ ] Rewarded ads integration (ATT prompt on iOS, consent in the EU)
 - [ ] In-app account deletion, analytics, crash reporting
 - [ ] Soft launch in one region, then global release
 
 ## 12. Still open
-- Should currency or cosmetics be shared across all of our games, or separate per game?
 - Which ad network (Unity Ads, AdMob, LevelPlay)?
