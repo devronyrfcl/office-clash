@@ -17,6 +17,7 @@ Goal: one clean scene that runs the networked ragdoll with correct spawning, and
 - [x] Session handling instead of one hard-coded name
 - [x] `Fusion.Addons.Physics` kept in `AssembliesToWeave`
 - [x] Remove unused scenes, move `Regdoll Character` to `Assets/Scenes`
+- [x] Apple Developer and Google Play Developer organisation accounts already available
 
 **To do**
 - [ ] 0.1 Confirm `Assets/Scenes/Regdoll Character.unity` is ticked in Build Settings (path was updated by the move)
@@ -26,7 +27,9 @@ Goal: one clean scene that runs the networked ragdoll with correct spawning, and
 - [ ] 0.5 Remove or repurpose unused assets: team props (`powerupBlock_teamRed`, `swiper_teamBlue`), unused KayKit/GUI Kit folders you won't ship
 - [ ] 0.6 Clean repo hygiene: confirm `.gitignore` covers `Library/`, `Temp/`, `Logs/`, `UserSettings/`, generated `.csproj`/`.sln`, `.DS_Store`; untrack anything already committed
 - [ ] 0.7 Android build settings: IL2CPP, ARM64, min API level, URP mobile quality tier, landscape orientation
-- [ ] 0.8 First Android build, 2 phones joining the same session. *Needs 0.1–0.7*
+- [ ] 0.8 Choose the final bundle ID / package name (same on both stores) and set it in Player Settings. *Needs the organisation accounts, already done*
+- [ ] 0.9 First Android build, 2 phones joining the same session. *Needs 0.1–0.8*
+- [ ] 0.10 First iOS build on a test device using the organisation signing certificate and provisioning profile, then push a build to TestFlight internal testing and an Android build to Play Console internal testing so the release pipeline is proven early. *Needs 0.8*
 
 ---
 
@@ -40,7 +43,7 @@ Goal: every prop in the office can be grabbed, thrown and is synced. Everything 
 - [ ] 1.4 Register all prefabs in the Fusion prefab table and make sure they spawn on the host and appear on clients
 - [ ] 1.5 Item spawn points + host-side respawn timer so the office never runs dry. *Needs 1.3*
 - [ ] 1.6 Physics sleep for idle props and a cap on active props (performance guard). *Needs 1.5*
-- [ ] 1.7 Test: throw items between 2 devices, check position sync and that the thrower is recorded. *Needs 1.2–1.5, 0.8*
+- [ ] 1.7 Test: throw items between 2 devices, check position sync and that the thrower is recorded. *Needs 1.2–1.5, 0.9*
 
 ---
 
@@ -177,8 +180,8 @@ Goal: move off client-host and ship to both stores.
 - [ ] 10.2 Headless Linux Fusion dedicated server build (`GameMode.Server`). *Needs Phases 1–5*
 - [ ] 10.3 Host the server on PlayFab Multiplayer Servers; allocate and connect clients; move the match-end CloudScript call to the server. *Needs 10.2, 8.9*
 - [ ] 10.4 Reconnect and app-backgrounding handling (rejoin or forfeit). *Needs 5.8*
-- [ ] 10.5 iOS build; TestFlight and Play Console closed testing
-- [ ] 10.6 Store requirements: Apple Developer ($99/yr) and Google Play ($25) accounts, icons, screenshots, privacy policy, age rating (cartoon violence)
+- [ ] 10.5 Closed testing on TestFlight (external group) and Play Console (closed track) with real testers. *Needs 0.10*
+- [ ] 10.6 Store listings: create the app records in App Store Connect and Play Console under the existing organisation accounts, reserve the bundle ID / package name, then prepare icons, screenshots, privacy policy, age rating (cartoon violence)
 - [ ] 10.7 Compliance: Apple App Tracking Transparency prompt, Google Play Data Safety form, EU ad consent, in-app account deletion. *Needs 9.7, 8.8*
 - [ ] 10.8 Analytics and crash reporting
 - [ ] 10.9 Soft launch in one region, then global release. *Needs everything above*

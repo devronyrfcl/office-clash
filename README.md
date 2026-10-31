@@ -149,7 +149,7 @@ With 10 players, rounds need a push toward the end. After 90 s, sections of the 
 - Matchmaking: a Quick Match that joins any open session with fewer than 10 players, or creates one. A private room code for playing with friends.
 
 ### Store requirements
-- Apple Developer account ($99/yr), Google Play Developer account ($25 one-time)
+- Apple Developer and Google Play Developer organisation accounts (already set up)
 - App icons, screenshots, privacy policy, age rating (cartoon violence)
 - iOS: handle the app being backgrounded mid-match (reconnect or forfeit)
 - Ads and accounts mean extra store work: Apple App Tracking Transparency prompt, Google Play Data Safety form, account deletion inside the app (required by both stores)
