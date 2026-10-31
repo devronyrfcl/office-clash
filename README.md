@@ -1,6 +1,6 @@
 # Office Clash — Game Plan
 
-> Living design + roadmap doc. Decisions confirmed on 2026-10-17 are listed in §1. Anything marked **(proposal)** is a suggestion that still needs a yes/no.
+> Living design doc. The work breakdown is in [TASKS.md](TASKS.md). Decisions confirmed on 2026-10-17 are listed in §1. Anything marked **(proposal)** is a suggestion that still needs a yes/no.
 
 ## 1. Confirmed decisions
 
@@ -42,7 +42,7 @@
 | Projectile ammo (big/mid/small, inventory counts, trajectory line) | `ShootSystem.cs`, `Prefab/big|Mid|small.prefab` | **Offline only.** Its inventory idea gets folded into the pocket system |
 | Team props | `Prefab/powerupBlock_teamRed.prefab`, `swiper_teamBlue.prefab` | Not needed for free-for-all. Repurpose as power-up boxes or remove |
 | Art | SimpleOfficeInteriors, KayKit Mini-Game pack, KayKit Adventurers (Knight), GUI Kit Yellow Kid | Imported |
-| Scenes | `Regdoll Character.unity` (the only scene in the build), `Scenes/Office Scene 1`, `Multiuplayer Scene`, `Starting level`, `SampleScene` | Office Scene 1 isn't connected to networking yet |
+| Scenes | `Scenes/Regdoll Character.unity` (the only scene, and the one in the build) | Holds the networked ragdoll test setup; becomes the office map |
 
 ### Known issues / tech debt to fix early
 1. `isActiveRagdoll` and `lastTimeBecameRagdoll` in `NetworkPlayer` are plain fields, not `[Networked]`. Clients can disagree with the host about who is knocked down, and the get-up timer isn't synced.
@@ -144,7 +144,7 @@ With 10 players, rounds need a push toward the end. After 90 s, sections of the 
 
 ### Networking
 - The current code is **client-hosted** (one phone acts as the host). With 10 mobile players, the host phone does all the physics and is a single point of failure (if it backgrounds or drops, the match dies).
-- **Decided:** client-host for the prototype (Milestones 0–3), then a **Fusion dedicated server** (headless Linux build) for launch, hosted on **PlayFab Multiplayer Servers**. PlayFab also handles accounts and data; Fusion runs the match itself.
+- **Decided:** client-host for the prototype (until the launch-prep phase in TASKS.md), then a **Fusion dedicated server** (headless Linux build) for launch, hosted on **PlayFab Multiplayer Servers**. PlayFab also handles accounts and data; Fusion runs the match itself.
 - Keep gameplay code authority-agnostic (`HasStateAuthority`, not "is a player") so the switch to a server is mostly a build/config change.
 - Matchmaking: a Quick Match that joins any open session with fewer than 10 players, or creates one. A private room code for playing with friends.
 
@@ -185,7 +185,7 @@ How they connect:
 - Later: cosmetics (mugs, hats, lanyards), which could also be the monetization.
 
 ## 8. Levels
-- **Open-plan office** (`Office Scene 1`): the MVP map. Cubicles, desks, lots of throwables, 10+ spawn points.
+- **Open-plan office** (built in the main scene): the MVP map. Cubicles, desks, lots of throwables, 10+ spawn points.
 - **Rooftop:** edges to fall off.
 - **Server room / break room:** small, chaotic maps for fewer players.
 
@@ -202,51 +202,5 @@ Each map needs: 10+ spawn points, item spawn points, pickup spawn points, an out
 ## 10. Audio & juice
 Hit sounds per item type, cartoony "oof" voice lines, camera shake on big hits, phone haptics on taking damage, slow-mo on the final elimination, paper and confetti particles.
 
-## 11. Roadmap
-
-### Milestone 0: Foundation (1–2 weeks)
-- [x] Fix tech debt 1–4 (network knockdown state, `NetworkButtons`, spawn points, session handling) — done 2026-10-17. `SpawnPoint` components still need placing in the scene
-- [ ] Move gameplay to `Office Scene 1` and add it to build settings
-- [ ] Make the office props networked throwables with item data
-- [ ] Get a first Android build running with 2 phones online
-- [ ] PlayFab setup: Office Clash title, PlayFab Unity SDK, guest login from Unity, API policy locking client writes
-
-### Milestone 1: Playable MVP (2–3 weeks)
-- [ ] Networked HP + damage from item hits (with attacker credit)
-- [ ] Self-recover get-up with invulnerability window
-- [ ] Elimination + spectate + last-player-wins round flow
-- [ ] Hands (L/R) + 2 pocket slots inventory
-- [ ] Touch controls (joystick + buttons)
-- [ ] Basic HUD (HP, players left, timer, items)
-- [ ] Quick Match lobby for up to 10
-- [ ] Fusion custom auth with PlayFab (`GetPhotonAuthenticationToken`)
-
-### Milestone 2: Fun + performance (2–3 weeks)
-- [ ] **10-player stress test on real phones.** Profile and add ragdoll/prop LOD
-- [ ] Sprint + stamina, dive/tackle
-- [ ] Pickups (Coffee, Energy drink, Super Grip, Bubble Wrap)
-- [ ] Shrinking office
-- [ ] SFX, haptics, camera shake, kill feed
-- [ ] Tune damage numbers and knockdown threshold through playtests
-
-### Milestone 3: Content (3 weeks)
-- [ ] Office worker character models + color variants
-- [ ] Second map (Rooftop)
-- [ ] Results screen with stats, private room codes
-- [ ] Settings (sensitivity, graphics quality, sound)
-- [ ] Sign in with Apple / Google, guest-account upgrade
-- [ ] Match results + statistics written to PlayFab via CloudScript, leaderboards
-- [ ] Cosmetics: PlayFab Economy catalog, equip screen, loadout synced into matches
-
-### Milestone 4: Launch prep
-- [ ] Move from client-host to a Fusion dedicated server (headless Linux build, `GameMode.Server`) on PlayFab Multiplayer Servers
-- [ ] iOS build, TestFlight + Play Console closed testing
-- [ ] Reconnect / backgrounding handling
-- [ ] Store listings, privacy policy, age rating
-- [ ] Cosmetics shop + Unity IAP with receipt redemption in PlayFab Economy
-- [ ] Rewarded ads integration (ATT prompt on iOS, consent in the EU)
-- [ ] In-app account deletion, analytics, crash reporting
-- [ ] Soft launch in one region, then global release
-
-## 12. Still open
+## 11. Still open
 - Which ad network (Unity Ads, AdMob, LevelPlay)?
