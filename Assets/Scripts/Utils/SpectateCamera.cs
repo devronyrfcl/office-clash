@@ -7,8 +7,27 @@ public class SpectateCamera : MonoBehaviour
     CinemachineVirtualCamera virtualCamera;
     CinemachineBrain brain;
 
+    //The spectate buttons read these
+    public static bool IsSpectating { get; private set; }
+    public static PlayerHealth Target { get; private set; }
+
+    static bool nextRequested = false;
+
     PlayerHealth target;
     bool seenLocal = false;
+
+    //Called by the Next button, and by the Tab key
+    public static void RequestNext()
+    {
+        nextRequested = true;
+    }
+
+    void OnDestroy()
+    {
+        IsSpectating = false;
+        Target = null;
+        nextRequested = false;
+    }
 
     void Start()
     {
@@ -29,13 +48,24 @@ public class SpectateCamera : MonoBehaviour
         bool localGone = local == null;
         bool spectating = seenLocal && (localGone || local.IsEliminated);
 
+        IsSpectating = spectating;
+
         if (!spectating)
+        {
+            Target = null;
+            nextRequested = false;
             return;
+        }
+
+        bool wantsNext = nextRequested || Input.GetKeyDown(KeyCode.Tab);
+        nextRequested = false;
 
         if (target == null || target.IsEliminated)
             target = FindNextTarget(null);
-        else if (Input.GetKeyDown(KeyCode.Tab))
+        else if (wantsNext)
             target = FindNextTarget(target);
+
+        Target = target;
 
         if (target != null)
         {

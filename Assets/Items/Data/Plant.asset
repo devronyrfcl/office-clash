@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Plant
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   displayName: Plant
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1ff0a4c92db044de2911d034fdebe60f, type: 3}
   itemClass: 1
   baseDamage: 15
   knockdownSpeed: 5

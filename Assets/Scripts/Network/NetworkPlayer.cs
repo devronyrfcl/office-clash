@@ -67,6 +67,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [SerializeField] float throwChargeTime = 1.2f;
     [SerializeField] float throwPitch = 30f;
 
+    [Header("Aim")]
+    //Without manual aim the throw turns towards the closest player in front of us
+    [SerializeField] bool autoAim = true;
+    [SerializeField] float autoAimAngle = 40f;
+    [SerializeField] float autoAimRange = 18f;
+    [SerializeField] float aimTurnSpeed = 450f;
+
     //Arm swing, angles in degrees and times in seconds
     [SerializeField] float windupAngle = 100f;
     [SerializeField] float followThroughAngle = 80f;
@@ -93,6 +100,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     [Networked] public float throwCharge { get; set; }
     [Networked] public byte heldHandIndex { get; set; }
     [Networked] public NetworkId heldObjectId { get; set; }
+
+    //Flat world direction (x, z) of the current throw, zero while not charging. Set by the host from the aim input or auto-aim
+    [Networked] public Vector2 throwAim { get; set; }
 
     //Knockdown state, decided by the host
     [Networked] public NetworkBool isKnockedDown { get; set; }
@@ -186,6 +196,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         }
         
         bool hasInput = GetInput(out NetworkInputData networkInputData);
+
+        if(hasInput)
+            lastAimInput = networkInputData.aimInput;
 
         //Without input nothing is pressed and held buttons stay as they were
         NetworkButtons buttons = hasInput ? networkInputData.buttons : previousButtons;
@@ -300,16 +313,23 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     {
         NetworkInputData networkInputData = new NetworkInputData();
 
-        networkInputData.movementInput = moveInputVector;
+        //The on-screen stick wins when it is used, otherwise the keyboard
+        networkInputData.movementInput = TouchInput.Move.sqrMagnitude > 0.01f ? TouchInput.Move : moveInputVector;
+
+        networkInputData.aimInput = TouchInput.Aim;
+
+        //The touch action button is Jump, and Get Up while knocked down
+        bool touchAction = TouchInput.Consume(InputButton.Jump);
 
         //Also check the keys right now, otherwise a held key looks released when there are more ticks than frames
-        networkInputData.buttons.Set(InputButton.Jump, isJumpButtonPressed || Input.GetKey(KeyCode.Space));
-        networkInputData.buttons.Set(InputButton.Revive, isReviveButtonPressed || Input.GetKey(KeyCode.R));
-        networkInputData.buttons.Set(InputButton.Grab, isGrabButtonPressed || Input.GetKey(KeyCode.G));
-        networkInputData.buttons.Set(InputButton.Throw, isThrowButtonHeld || Input.GetKey(KeyCode.F));
-        networkInputData.buttons.Set(InputButton.ThrowSecond, isThrowSecondButtonHeld || Input.GetKey(KeyCode.T));
-        networkInputData.buttons.Set(InputButton.SwapPocket1, isSwapPocket1Pressed || Input.GetKey(KeyCode.Z));
-        networkInputData.buttons.Set(InputButton.SwapPocket2, isSwapPocket2Pressed || Input.GetKey(KeyCode.X));
+        networkInputData.buttons.Set(InputButton.Jump, isJumpButtonPressed || Input.GetKey(KeyCode.Space) || (touchAction && !isKnockedDown));
+        networkInputData.buttons.Set(InputButton.Revive, isReviveButtonPressed || Input.GetKey(KeyCode.R) || (touchAction && isKnockedDown) || TouchInput.Consume(InputButton.Revive));
+        networkInputData.buttons.Set(InputButton.Grab, isGrabButtonPressed || Input.GetKey(KeyCode.G) || TouchInput.Consume(InputButton.Grab));
+        networkInputData.buttons.Set(InputButton.Throw, isThrowButtonHeld || Input.GetKey(KeyCode.F) || TouchInput.Consume(InputButton.Throw));
+        networkInputData.buttons.Set(InputButton.ThrowSecond, isThrowSecondButtonHeld || Input.GetKey(KeyCode.T) || TouchInput.Consume(InputButton.ThrowSecond));
+        networkInputData.buttons.Set(InputButton.ThrowLeft, TouchInput.Consume(InputButton.ThrowLeft));
+        networkInputData.buttons.Set(InputButton.SwapPocket1, isSwapPocket1Pressed || Input.GetKey(KeyCode.Z) || TouchInput.Consume(InputButton.SwapPocket1));
+        networkInputData.buttons.Set(InputButton.SwapPocket2, isSwapPocket2Pressed || Input.GetKey(KeyCode.X) || TouchInput.Consume(InputButton.SwapPocket2));
 
         isJumpButtonPressed = false;
         isReviveButtonPressed = false;
@@ -422,6 +442,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public bool IsChargingThrow => grabState == GrabState.Charging;
 
+    //Host only, the aim from the last input
+    Vector2 lastAimInput = Vector2.zero;
+
     //The button that started the current charge, the throw ends when it is released
     InputButton chargingButton = InputButton.Throw;
 
@@ -446,8 +469,11 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                     playerInventory.SwapPocket(0);
                 else if(pressedButtons.IsSet(InputButton.SwapPocket2))
                     playerInventory.SwapPocket(1);
+                //Hand 1 is the right hand, hand 0 the left. These two only throw from their own hand
                 else if(pressedButtons.IsSet(InputButton.ThrowSecond))
                     StartCharging(InputButton.ThrowSecond, playerInventory.GetThrowHand(1));
+                else if(pressedButtons.IsSet(InputButton.ThrowLeft))
+                    StartCharging(InputButton.ThrowLeft, playerInventory.GetThrowHand(0));
                 else if(pressedButtons.IsSet(InputButton.Throw))
                 {
                     //The main throw button uses the first hand that holds something
@@ -465,6 +491,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 }
 
                 throwCharge = Mathf.Min(1f, throwCharge + Runner.DeltaTime / throwChargeTime);
+
+                UpdateThrowAim();
 
                 if(!buttons.IsSet(chargingButton))
                     StartThrowSwing();
@@ -507,6 +535,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         grabState = GrabState.None;
         throwCharge = 0f;
         heldObjectId = default;
+        throwAim = Vector2.zero;
     }
 
     Vector3 GetFlatForward()
@@ -517,9 +546,81 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         return flatForward.sqrMagnitude > 0.001f ? flatForward.normalized : Vector3.forward;
     }
 
+    //The direction of the throw on the ground, the aim while there is one, otherwise where we look
+    Vector3 GetThrowDirection()
+    {
+        Vector2 aim = throwAim;
+
+        return aim.sqrMagnitude > 0.01f ? new Vector3(aim.x, 0f, aim.y).normalized : GetFlatForward();
+    }
+
+    //Host only. Takes the manual aim, or turns towards the closest player in front, and turns the body that way
+    void UpdateThrowAim()
+    {
+        Vector2 aim = Vector2.zero;
+
+        //Dragging away from the throw button aims. The axes are the same as for walking
+        if(lastAimInput.sqrMagnitude > 0.25f)
+            aim = new Vector2(lastAimInput.x, -lastAimInput.y).normalized;
+        else if(autoAim && TryFindAutoAimTarget(out Vector3 targetPosition))
+        {
+            Vector3 toTarget = targetPosition - transform.position;
+
+            aim = new Vector2(toTarget.x, toTarget.z).normalized;
+        }
+
+        throwAim = aim;
+
+        if(aim == Vector2.zero || isKnockedDown)
+            return;
+
+        //Face the throw direction so the arm swings the right way
+        Quaternion desiredRotation = Quaternion.LookRotation(new Vector3(aim.x, 0f, aim.y), transform.up);
+
+        mainJoint.targetRotation = Quaternion.RotateTowards(mainJoint.targetRotation, desiredRotation, Runner.DeltaTime * aimTurnSpeed);
+    }
+
+    bool TryFindAutoAimTarget(out Vector3 position)
+    {
+        position = Vector3.zero;
+
+        float bestScore = float.MaxValue;
+        Vector3 forward = GetFlatForward();
+
+        foreach (PlayerHealth other in PlayerHealth.All)
+        {
+            if(other == null || other.IsEliminated || other.Object == Object)
+                continue;
+
+            Vector3 toOther = other.transform.position - transform.position;
+            toOther.y = 0f;
+
+            float distance = toOther.magnitude;
+
+            if(distance < 0.5f || distance > autoAimRange)
+                continue;
+
+            float angle = Vector3.Angle(forward, toOther);
+
+            if(angle > autoAimAngle)
+                continue;
+
+            //Prefer targets that are straight ahead, then closer ones
+            float score = angle / autoAimAngle + distance / autoAimRange * 0.5f;
+
+            if(score < bestScore)
+            {
+                bestScore = score;
+                position = other.transform.position;
+            }
+        }
+
+        return bestScore < float.MaxValue;
+    }
+
     Vector3 GetThrowVelocity(float charge)
     {
-        Vector3 flatForward = GetFlatForward();
+        Vector3 flatForward = GetThrowDirection();
         Vector3 right = Vector3.Cross(Vector3.up, flatForward);
 
         //Tilt the direction up

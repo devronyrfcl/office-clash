@@ -1,6 +1,6 @@
 using UnityEngine;
 
-//Shows the path of the throw and a power bar while the local player charges a throw
+//Shows the path of the throw while the local player charges a throw. The power bar is part of the HUD
 public class ThrowAimUI : MonoBehaviour
 {
     [SerializeField] float lineWidth = 0.06f;
@@ -61,26 +61,6 @@ public class ThrowAimUI : MonoBehaviour
 
         lineRenderer.startColor = chargeColor;
         lineRenderer.endColor = new Color(chargeColor.r, chargeColor.g, chargeColor.b, 0.35f);
-    }
-
-    void OnGUI()
-    {
-        if(!networkPlayer.IsChargingThrow)
-            return;
-
-        float width = 260f;
-        float height = 22f;
-
-        Rect barRect = new Rect((Screen.width - width) * 0.5f, Screen.height - 80f, width, height);
-
-        GUI.color = new Color(0f, 0f, 0f, 0.6f);
-        GUI.DrawTexture(new Rect(barRect.x - 3f, barRect.y - 3f, barRect.width + 6f, barRect.height + 6f), Texture2D.whiteTexture);
-
-        GUI.color = GetChargeColor(networkPlayer.throwCharge);
-        GUI.DrawTexture(new Rect(barRect.x, barRect.y, barRect.width * networkPlayer.throwCharge, barRect.height), Texture2D.whiteTexture);
-
-        GUI.color = Color.white;
-        GUI.Label(new Rect(barRect.x, barRect.y - 24f, barRect.width, 20f), "Throw power - release to throw");
     }
 
     void OnDestroy()

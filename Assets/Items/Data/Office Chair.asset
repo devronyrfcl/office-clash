@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Office Chair
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   displayName: Office Chair
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c47d5b4fb2c914268a4dae2f00d9ab34, type: 3}
   itemClass: 2
   baseDamage: 35
   knockdownSpeed: 0

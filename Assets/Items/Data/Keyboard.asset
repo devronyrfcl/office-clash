@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Keyboard
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   displayName: Keyboard
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 6af41234c587f496c8c557d3f01005c3, type: 3}
   itemClass: 1
   baseDamage: 15
   knockdownSpeed: 5

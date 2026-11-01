@@ -41,7 +41,7 @@
 | Health / energy / sprint | `TopDownController.cs` | **Offline prototype only.** Can be ported for HP and stamina |
 | Projectile ammo (big/mid/small, inventory counts, trajectory line) | `ShootSystem.cs`, `Prefab/big|Mid|small.prefab` | **Offline only.** Its inventory idea gets folded into the pocket system |
 | Team props | `Prefab/powerupBlock_teamRed.prefab`, `swiper_teamBlue.prefab` | Not needed for free-for-all. Repurpose as power-up boxes or remove |
-| Art | SimpleOfficeInteriors, KayKit Mini-Game pack, KayKit Adventurers (Knight), GUI Kit Yellow Kid | Imported |
+| Art | SimpleOfficeInteriors, KayKit Mini-Game pack, KayKit Adventurers (Knight), GUI Pro-CasualGame (Layer Lab, UI) | Imported |
 | Scenes | `Scenes/Regdoll Character.unity` (the only scene, and the one in the build) | Holds the networked ragdoll test setup; becomes the office map |
 
 ### Known issues / tech debt to fix early
@@ -192,7 +192,7 @@ How they connect:
 Each map needs: 10+ spawn points, item spawn points, pickup spawn points, an out-of-bounds kill volume, and the shrinking-zone sections.
 
 ## 9. UI / UX
-- **Main menu:** Quick Match, Play with Friends (room code), Customize, Settings (GUI Kit Yellow Kid)
+- **Main menu:** Quick Match, Play with Friends (room code), Customize, Settings (GUI Pro-CasualGame)
 - **Lobby:** player count "6/10", countdown, starts automatically when full or after a timer
 - **HUD:** HP, players left, timer, hand items + charge arc, pocket slots, get-up prompt
 - **Kill feed:** "Rony knocked out Sam with a keyboard"

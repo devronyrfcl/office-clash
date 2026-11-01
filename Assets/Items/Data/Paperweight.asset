@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Paperweight
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   displayName: Paperweight
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: fddef0b74b730451f8d452af510cf237, type: 3}
   itemClass: 0
   baseDamage: 12
   knockdownSpeed: 6
