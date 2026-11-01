@@ -6,7 +6,10 @@ public enum InputButton
     Jump,
     Revive,
     Grab,
-    Throw
+    Throw,
+    ThrowSecond,
+    SwapPocket1,
+    SwapPocket2
 }
 
 public struct NetworkInputData : INetworkInput

@@ -33,11 +33,25 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     [SerializeField] float minRagdollTime = 3f;
 
+    [Header("Health")]
+    //Each press of the get up button shortens the time on the floor
+    [SerializeField] float getUpTapTime = 0.3f;
+    [SerializeField] float invulnerableAfterGetUp = 1f;
+    [SerializeField] int fallDamage = 30;
+
+    PlayerHealth playerHealth;
+    PlayerInventory playerInventory;
+
+    public HandGrabHandler[] Hands => handGrabHandlers;
+
     //Set from Update and cleared when the input is sent, so short taps between ticks are not lost
     bool isJumpButtonPressed = false;
     bool isReviveButtonPressed = false;
     bool isGrabButtonPressed = false;
     bool isThrowButtonHeld = false;
+    bool isThrowSecondButtonHeld = false;
+    bool isSwapPocket1Pressed = false;
+    bool isSwapPocket2Pressed = false;
 
     RaycastHit[] raycastHits = new RaycastHit[10];
 
@@ -113,6 +127,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         if(handGrabHandlers.Length == 0)
             handGrabHandlers = GetComponentsInChildren<HandGrabHandler>();
 
+        playerHealth = GetComponent<PlayerHealth>();
+        playerInventory = GetComponent<PlayerInventory>();
 
     }
 
@@ -127,6 +143,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         isReviveButtonPressed |= Input.GetKey(KeyCode.R);
         isGrabButtonPressed |= Input.GetKey(KeyCode.G);
         isThrowButtonHeld |= Input.GetKey(KeyCode.F);
+        isThrowSecondButtonHeld |= Input.GetKey(KeyCode.T);
+        isSwapPocket1Pressed |= Input.GetKey(KeyCode.Z);
+        isSwapPocket2Pressed |= Input.GetKey(KeyCode.X);
 
     }
 
@@ -202,10 +221,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             }
             else
             {
-                if(pressedButtons.IsSet(InputButton.Revive) && getUpTimer.ExpiredOrNotRunning(Runner))
-                {
-                    MakeActiveRagdoll();
-                }
+                if(pressedButtons.IsSet(InputButton.Revive))
+                    ShortenGetUpTime(getUpTapTime);
                 
             }
 
@@ -218,7 +235,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         {
             networkedMovementSpeed = localForwardVelocity * 0.4f;
 
-            UpdateGrab(pressedButtons.IsSet(InputButton.Grab), buttons.IsSet(InputButton.Throw), pressedButtons.IsSet(InputButton.Throw));
+            //Get up on our own once the time on the floor is over, eliminated players stay down
+            if(isKnockedDown && !IsEliminated && getUpTimer.Expired(Runner))
+                MakeActiveRagdoll();
+
+            if(!IsEliminated)
+                UpdateGrab(buttons, pressedButtons);
 
             //update the joint rotation based on the animation
             for (int i = 0; i < syncPhysicsObjects.Length; i++)
@@ -229,6 +251,10 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             if(transform.position.y < -10f)
             {
+                //Falling out of the world hurts but never eliminates on its own account
+                if(playerHealth != null)
+                    playerHealth.ApplyDamage(fallDamage, PlayerRef.None);
+
                 Transform spawnPoint = SpawnPoint.PickRandom();
 
                 if(spawnPoint != null)
@@ -236,7 +262,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
                 else
                     networkRigidbody3D.Teleport(Vector3.zero, Quaternion.identity);
 
-                MakeActiveRagdoll();
+                if(!IsEliminated)
+                    MakeActiveRagdoll();
             }
                 
         }
@@ -246,7 +273,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     {
         animator.SetFloat("movementSpeed", networkedMovementSpeed);
 
-        bool isCarrying = grabState == GrabState.Holding || grabState == GrabState.Charging;
+        bool isCarrying = playerInventory != null && playerInventory.HasHandItem && grabState != GrabState.Swinging;
 
         animator.SetBool("isGrabbing", isCarrying);
         animator.SetBool("isCarrying", isCarrying);
@@ -280,11 +307,17 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         networkInputData.buttons.Set(InputButton.Revive, isReviveButtonPressed || Input.GetKey(KeyCode.R));
         networkInputData.buttons.Set(InputButton.Grab, isGrabButtonPressed || Input.GetKey(KeyCode.G));
         networkInputData.buttons.Set(InputButton.Throw, isThrowButtonHeld || Input.GetKey(KeyCode.F));
+        networkInputData.buttons.Set(InputButton.ThrowSecond, isThrowSecondButtonHeld || Input.GetKey(KeyCode.T));
+        networkInputData.buttons.Set(InputButton.SwapPocket1, isSwapPocket1Pressed || Input.GetKey(KeyCode.Z));
+        networkInputData.buttons.Set(InputButton.SwapPocket2, isSwapPocket2Pressed || Input.GetKey(KeyCode.X));
 
         isJumpButtonPressed = false;
         isReviveButtonPressed = false;
         isGrabButtonPressed = false;
         isThrowButtonHeld = false;
+        isThrowSecondButtonHeld = false;
+        isSwapPocket1Pressed = false;
+        isSwapPocket2Pressed = false;
 
         return networkInputData;
     }
@@ -343,6 +376,38 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         getUpTimer = TickTimer.None;
 
         isKnockedDown = false;
+
+        if(playerHealth != null)
+            playerHealth.StartInvulnerability(invulnerableAfterGetUp);
+    }
+
+    bool IsEliminated => playerHealth != null && playerHealth.IsEliminated;
+
+    void ShortenGetUpTime(float seconds)
+    {
+        if(!Object.HasStateAuthority || !isKnockedDown || IsEliminated || !getUpTimer.IsRunning)
+            return;
+
+        float remaining = getUpTimer.RemainingTime(Runner) ?? 0f;
+
+        getUpTimer = TickTimer.CreateFromSeconds(Runner, Mathf.Max(0f, remaining - seconds));
+    }
+
+    //Called by PlayerHealth on the host when health reaches zero
+    public void OnEliminated()
+    {
+        if(!Object.HasStateAuthority)
+            return;
+
+        if(!isKnockedDown)
+            MakeRegdoll();
+
+        //Everything we carried is left behind as loot
+        if(playerInventory != null)
+            playerInventory.DropPockets();
+
+        //An eliminated player never gets up
+        getUpTimer = TickTimer.None;
     }
 
     /*void OnCollisionEnter(Collision collision)
@@ -357,23 +422,38 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public bool IsChargingThrow => grabState == GrabState.Charging;
 
-    void UpdateGrab(bool isGrabPressed, bool isThrowHeld, bool isThrowStarted)
+    //The button that started the current charge, the throw ends when it is released
+    InputButton chargingButton = InputButton.Throw;
+
+    void UpdateGrab(NetworkButtons buttons, NetworkButtons pressedButtons)
     {
+        if(playerInventory == null)
+            return;
+
+        playerInventory.Tick();
+
+        bool isGrabPressed = pressedButtons.IsSet(InputButton.Grab);
+
         switch (grabState)
         {
             case GrabState.None:
-                if(isGrabPressed && !isKnockedDown)
-                    TryGrabObject();
-                break;
+                if(isKnockedDown)
+                    break;
 
-            case GrabState.Holding:
-                //The object got lost, for example the hand was pulled away from it
-                if(!HeldHand.IsHolding || isGrabPressed)
-                    DropHeldObject();
-                else if(isThrowStarted)
+                if(isGrabPressed)
+                    playerInventory.GrabOrDrop();
+                else if(pressedButtons.IsSet(InputButton.SwapPocket1))
+                    playerInventory.SwapPocket(0);
+                else if(pressedButtons.IsSet(InputButton.SwapPocket2))
+                    playerInventory.SwapPocket(1);
+                else if(pressedButtons.IsSet(InputButton.ThrowSecond))
+                    StartCharging(InputButton.ThrowSecond, playerInventory.GetThrowHand(1));
+                else if(pressedButtons.IsSet(InputButton.Throw))
                 {
-                    grabState = GrabState.Charging;
-                    throwCharge = 0f;
+                    //The main throw button uses the first hand that holds something
+                    int hand = playerInventory.GetThrowHand(0);
+
+                    StartCharging(InputButton.Throw, hand >= 0 ? hand : playerInventory.GetThrowHand(1));
                 }
                 break;
 
@@ -386,7 +466,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
                 throwCharge = Mathf.Min(1f, throwCharge + Runner.DeltaTime / throwChargeTime);
 
-                if(!isThrowHeld)
+                if(!buttons.IsSet(chargingButton))
                     StartThrowSwing();
                 break;
 
@@ -401,46 +481,23 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         }
     }
 
-    void TryGrabObject()
+    void StartCharging(InputButton button, int hand)
     {
-        //Use the hand that is closest to an object
-        int closestHandIndex = -1;
-        float closestDistance = float.MaxValue;
-        Rigidbody closestBody = null;
-
-        for (int i = 0; i < handGrabHandlers.Length; i++)
-        {
-            float distance = handGrabHandlers[i].FindGrabbable(out Rigidbody body);
-
-            if(body != null && distance < closestDistance)
-            {
-                closestHandIndex = i;
-                closestDistance = distance;
-                closestBody = body;
-            }
-        }
-
-        if(closestBody == null)
+        if(hand < 0)
             return;
 
-        handGrabHandlers[closestHandIndex].Grab(closestBody);
-
-        heldHandIndex = (byte)closestHandIndex;
-        heldObjectId = closestBody.GetComponentInParent<NetworkObject>().Id;
+        chargingButton = button;
+        heldHandIndex = (byte)hand;
+        heldObjectId = playerInventory.GetHandItem(hand);
         throwCharge = 0f;
-        grabState = GrabState.Holding;
+        grabState = GrabState.Charging;
     }
 
-    //Lets go of whatever we hold and gives the arm back to the ragdoll
+    //Lets go of everything in the hands and gives the arms back to the ragdoll
     void DropHeldObject()
     {
-        if(grabState == GrabState.None)
-            return;
-
-        HandGrabHandler hand = HeldHand;
-
-        hand.Release();
-        hand.Arm.EndSwing();
+        if(playerInventory != null)
+            playerInventory.DropHands();
 
         ResetGrabState();
     }
@@ -468,7 +525,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         //Tilt the direction up
         Vector3 direction = Quaternion.AngleAxis(-throwPitch, right) * flatForward;
 
-        return direction * Mathf.Lerp(minThrowSpeed, maxThrowSpeed, charge);
+        float itemMultiplier = 1f;
+
+        //Heavy items fly slower
+        if(Runner.TryFindObject(heldObjectId, out NetworkObject heldObject) && heldObject.TryGetComponent(out ThrowableItem item) && item.Data != null)
+            itemMultiplier = item.Data.throwSpeedMultiplier;
+
+        return direction * Mathf.Lerp(minThrowSpeed, maxThrowSpeed, charge) * itemMultiplier;
     }
 
     //Used for the line the player sees while charging
@@ -542,7 +605,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             Vector3 spin = Vector3.Cross(Vector3.up, GetFlatForward()) * -swingThrowVelocity.magnitude * 0.5f;
 
-            hand.Throw(swingThrowVelocity, spin);
+            hand.Throw(swingThrowVelocity, spin, throwCharge);
         }
 
         if(swingTimer >= windupTime + swingTime + followThroughTime)
@@ -567,6 +630,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             //Shows the throw line and power bar to the local player
             gameObject.AddComponent<ThrowAimUI>();
+
+            //Lives on its own object so it keeps working after this player is removed
+            new GameObject("Spectate Camera").AddComponent<SpectateCamera>();
 
             Utils.DebugLog("Spawned Local Player with input authority");
 

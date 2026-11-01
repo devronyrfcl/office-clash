@@ -51,7 +51,8 @@ public class HandGrabHandler : MonoBehaviour
 
     List<ReleasedBody> releasedBodies = new List<ReleasedBody>();
 
-    Collider[] overlapBuffer = new Collider[16];
+    //The player's own body parts and the floor also overlap the grab sphere, a small buffer can miss the item
+    Collider[] overlapBuffer = new Collider[64];
     Collider[] playerColliders;
 
     // References
@@ -152,6 +153,12 @@ public class HandGrabHandler : MonoBehaviour
 
         heldBodies.Add(heldBody);
 
+        // Picking an item up ends the credit of whoever threw it before
+        ThrowableItem grabbedItem = heldBody.GetComponentInParent<ThrowableItem>();
+
+        if(grabbedItem != null)
+            grabbedItem.ClearThrower();
+
         // The object must never push or shake our own body while we carry it
         SetIgnoreSelf(heldColliders, true);
 
@@ -182,7 +189,7 @@ public class HandGrabHandler : MonoBehaviour
     }
 
     // Lets go of the object and launches it
-    public void Throw(Vector3 velocity, Vector3 angularVelocity)
+    public void Throw(Vector3 velocity, Vector3 angularVelocity, float charge)
     {
         if(!IsHolding)
             return;
@@ -190,6 +197,12 @@ public class HandGrabHandler : MonoBehaviour
         Rigidbody thrownBody = heldBody;
 
         Release();
+
+        // Remember who threw it so hits can be credited
+        ThrowableItem throwableItem = thrownBody.GetComponentInParent<ThrowableItem>();
+
+        if(throwableItem != null)
+            throwableItem.OnThrown(networkPlayer.Object.InputAuthority, charge);
 
         thrownBody.WakeUp();
         thrownBody.linearVelocity = velocity;

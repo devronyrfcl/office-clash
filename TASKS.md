@@ -25,7 +25,7 @@ Goal: one clean scene that runs the networked ragdoll with correct spawning, and
 - [ ] 0.3 Place 10+ `SpawnPoint` components spread around the office
 - [ ] 0.4 Add an out-of-bounds trigger volume under the map (hook it to damage in 1.x; for now just respawn)
 - [ ] 0.5 Remove or repurpose unused assets: team props (`powerupBlock_teamRed`, `swiper_teamBlue`), unused KayKit/GUI Kit folders you won't ship
-- [ ] 0.6 Clean repo hygiene: confirm `.gitignore` covers `Library/`, `Temp/`, `Logs/`, `UserSettings/`, generated `.csproj`/`.sln`, `.DS_Store`; untrack anything already committed
+- [x] 0.6 Clean repo hygiene: confirm `.gitignore` covers `Library/`, `Temp/`, `Logs/`, `UserSettings/`, generated `.csproj`/`.sln`, `.DS_Store`; untrack anything already committed
 - [ ] 0.7 Android build settings: IL2CPP, ARM64, min API level, URP mobile quality tier, landscape orientation
 - [ ] 0.8 Choose the final bundle ID / package name (same on both stores) and set it in Player Settings. *Needs the organisation accounts, already done*
 - [ ] 0.9 First Android build, 2 phones joining the same session. *Needs 0.1–0.8*
@@ -37,12 +37,15 @@ Goal: one clean scene that runs the networked ragdoll with correct spawning, and
 
 Goal: every prop in the office can be grabbed, thrown and is synced. Everything later (damage, inventory) builds on this.
 
-- [ ] 1.1 Create `ItemData` ScriptableObject: class (Small / Medium / Big), base damage, knockdown rule, pocket-allowed flag, hands required, icon, throw speed
-- [ ] 1.2 Create `ThrowableItem` component holding an `ItemData` reference and a `[Networked]` last-thrower `PlayerRef`. *Needs 1.1*
-- [ ] 1.3 Make prefabs for the first item set (mouse, stapler, mug, keyboard, monitor, plant, office chair). Each gets `NetworkObject`, `NetworkRigidbody3D`, `CauseDamage` tag, `ThrowableItem`. *Needs 1.2*
-- [ ] 1.4 Register all prefabs in the Fusion prefab table and make sure they spawn on the host and appear on clients
-- [ ] 1.5 Item spawn points + host-side respawn timer so the office never runs dry. *Needs 1.3*
-- [ ] 1.6 Physics sleep for idle props and a cap on active props (performance guard). *Needs 1.5*
+- [x] 1.1 Create `ItemData` ScriptableObject: class (Small / Medium / Big), base damage, knockdown rule, pocket-allowed flag, hands required, icon, throw speed
+- [x] 1.2 Create `ThrowableItem` component holding an `ItemData` reference and a `[Networked]` last-thrower `PlayerRef`. *Needs 1.1*
+- [x] 1.2b Call `ThrowableItem.OnThrown` from the throw code in `NetworkPlayer` / `HandGrabHandler` so `LastThrower` is set. *Needs 1.2*
+- [x] 1.3 Make prefabs for the first item set (mouse, stapler, mug, keyboard, monitor, plant, office chair). Each gets `NetworkObject`, `NetworkRigidbody3D`, `CauseDamage` tag, `ThrowableItem`. *Needs 1.2*
+- [x] 1.4 Register all prefabs in the Fusion prefab table and make sure they spawn on the host and appear on clients. *Verified with the editor as host and a standalone macOS build as client: all 20 items appeared on the client*
+- [x] 1.5 Item spawn points + host-side respawn timer so the office never runs dry (`ItemSpawnPoint`, `ItemSpawner`). *Needs 1.3*
+- [x] 1.5b In the scene: add an empty object with `NetworkObject` + `ItemSpawner`, assign the seven item prefabs, and place `ItemSpawnPoint` objects around the office. *Needs 1.5*
+- [x] 1.6 Physics sleep for idle props and a cap on active props (performance guard). *Needs 1.5*
+- [x] 1.6b Weighted item spawning so small items appear more often than chairs (per-prefab weight on the spawner). *Needs 1.5*
 - [ ] 1.7 Test: throw items between 2 devices, check position sync and that the thrower is recorded. *Needs 1.2–1.5, 0.9*
 
 ---
@@ -51,17 +54,17 @@ Goal: every prop in the office can be grabbed, thrown and is synced. Everything 
 
 Goal: a match can be won. Port the offline health logic and make it host-authoritative.
 
-- [ ] 2.1 Add `[Networked] Health` (100 max) to `NetworkPlayer`; port the useful parts of `TopDownController` health handling
-- [ ] 2.2 Damage on hit: in `DetectCollision`, compute damage = item base damage × impact speed factor, applied on the host only. *Needs 1.2, 2.1*
-- [ ] 2.3 Knockdown rules per item class (small only at full charge, medium above speed threshold, big always with knockback). *Needs 2.2*
-- [ ] 2.4 Credit the attacker: store last damager for kill credit. *Needs 2.2*
-- [ ] 2.5 Get-up: auto after ~3 s, tap-to-speed-up, ~1 s invulnerability after getting up. *Needs 2.3*
-- [ ] 2.6 Falling out of bounds: heavy damage (tunable, 30) + respawn at a random spawn point, never instant elimination. *Needs 0.4, 2.1*
-- [ ] 2.7 Drop hand items when knocked down; keep pocket items. *Needs 2.3 and 3.x for pockets; hands-only version first*
-- [ ] 2.8 Elimination at 0 HP: limp ragdoll, then despawn; mark the player eliminated; drop their items as loot. *Needs 2.1*
-- [ ] 2.9 Round flow state machine on the host: Waiting → Countdown → Playing → Ended; last player alive wins. *Needs 2.8*
-- [ ] 2.10 Spectate camera that cycles through remaining players. *Needs 2.8*
-- [ ] 2.11 Test: 2–3 devices, fight to elimination, winner detected, round ends. *Needs 2.1–2.10*
+- [x] 2.1 Add `[Networked] Health` (100 max). Done as a separate `PlayerHealth` component on the player prefab (health, eliminated flag, last attacker, invulnerability). *Code written and compiling, not yet play-tested*
+- [x] 2.2 Damage on hit: in `DetectCollision`, compute damage = item base damage × impact speed factor, applied on the host only. *Needs 1.2, 2.1*
+- [x] 2.3 Knockdown rules per item class (small only at full charge, medium above speed threshold, big always with knockback). *Needs 2.2*
+- [x] 2.4 Credit the attacker: store last damager for kill credit. *Needs 2.2*
+- [x] 2.5 Get-up: auto after ~3 s, tap-to-speed-up, ~1 s invulnerability after getting up. *Needs 2.3*
+- [x] 2.6 Falling out of bounds: heavy damage (tunable, 30) + respawn at a random spawn point. Currently triggers below y = -10; switch it to the out-of-bounds volume once 0.4 exists. *Needs 0.4, 2.1*
+- [x] 2.7 Drop hand items when knocked down (hands only; pocket items are kept once Phase 3 adds pockets). *Needs 2.3*
+- [x] 2.8 Elimination at 0 HP: limp ragdoll, despawns after 5 s, marked eliminated, held items dropped. Pocket loot drops wait for Phase 3. *Needs 2.1*
+- [x] 2.9 Round flow state machine on the host (`RoundManager`): Waiting → Countdown → Playing → Ended; last player alive wins; damage only applies while Playing. A temporary text HUD shows the state until Phase 4. Restart / play again comes in Phase 5. *Needs 2.8*
+- [x] 2.10 Spectate camera that cycles through remaining players (`SpectateCamera`, Tab key for now; touch button comes in Phase 4). *Needs 2.8*
+- [ ] 2.11 Test (nothing in Phase 2 has been run in play mode yet): 2–3 devices, fight to elimination, winner detected, round ends. *Needs 2.1–2.10*
 
 ---
 
@@ -69,13 +72,13 @@ Goal: a match can be won. Port the offline health logic and make it host-authori
 
 Goal: two hands plus two pocket slots, fully synced.
 
-- [ ] 3.1 Replace `heldObjectId` with `[Networked]` slots: `leftHand`, `rightHand`, `pocket[2]` (all `NetworkId`, host-authoritative)
-- [ ] 3.2 Rework `HandGrabHandler` to be per-hand (grab, hold, release for left and right independently). *Needs 3.1*
-- [ ] 3.3 Grab rule: nearest item goes to a free hand; both hands full → free pocket; big items need both hands and never go in a pocket. *Needs 3.2, 1.1*
-- [ ] 3.4 Throw from the selected hand with charge and arc preview (extend `ThrowAimUI` for two hands). *Needs 3.2*
-- [ ] 3.5 Swap pocket → empty hand, and drop-without-throwing. *Needs 3.3*
-- [ ] 3.6 Visual attachment of pocket items (hidden or small marker on the body) and held items on both hands. *Needs 3.3*
-- [ ] 3.7 Test: all combinations (two small, one big, full pockets, knockdown drop). *Needs 3.1–3.6*
+- [x] 3.1 Networked slots in a new `PlayerInventory` component: two hand slots and two pocket slots (`NetworkId` arrays, host-authoritative). `heldObjectId` stays only as the item currently being thrown, for the aim preview. The component is added to the player prefab
+- [x] 3.2 Hands work independently: each hand holds its own item, and the grab search buffer was enlarged so items near the player are no longer missed. Only one hand can charge or swing a throw at a time. *Needs 3.1*
+- [x] 3.3 Grab rule implemented: nearest item goes to a free hand; both hands full → free pocket; big items need both hands and never go in a pocket. A grab that cannot be carried does nothing instead of dropping what you hold. *Tested on the host in play mode. Needs 3.2, 1.1*
+- [x] 3.4 Throw from the selected hand with charge and arc preview: new `ThrowSecond` button (keys F / T for now), big items throw slower. *Confirmed working by you in play mode. Needs 3.2*
+- [x] 3.5 Swap pocket → hand, stow hand item → empty pocket, swap with full hands, and drop (keys Z / X for the pockets, G to drop). *Tested on the host in play mode. Needs 3.3*
+- [x] 3.6 Pocketed items are hidden with physics off and follow the owner; items spill out as loot on elimination or when the player leaves. Pocket items are moved with the networked teleport call. *Client-side visibility of pocketed items is not tested yet. Needs 3.3*
+- [ ] 3.7 Test: all combinations (two small, one big, full pockets, knockdown drop). Done on the host: two small items, full pockets, big item refused, swap, drop. Still to test: knockdown drop, and a client viewing pockets. Remove `Assets/Scripts/Dev/InventoryTestDriver.cs` when finished. *Needs 3.1–3.6*
 
 ---
 

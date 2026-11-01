@@ -80,7 +80,7 @@ public class ThrowAimUI : MonoBehaviour
         GUI.DrawTexture(new Rect(barRect.x, barRect.y, barRect.width * networkPlayer.throwCharge, barRect.height), Texture2D.whiteTexture);
 
         GUI.color = Color.white;
-        GUI.Label(new Rect(barRect.x, barRect.y - 24f, barRect.width, 20f), "Throw power - release F to throw");
+        GUI.Label(new Rect(barRect.x, barRect.y - 24f, barRect.width, 20f), "Throw power - release to throw");
     }
 
     void OnDestroy()
