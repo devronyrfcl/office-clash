@@ -103,3 +103,5 @@ InitTestScene*.unity*
 
 # Generated solution (new Unity format)
 *.slnx
+config.bat
+node_modules
