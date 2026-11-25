@@ -74,6 +74,9 @@ public class RoundManager : NetworkBehaviour
                 else if (countdownTimer.Expired(Runner))
                 {
                     countdownTimer = TickTimer.None;
+                    // Keep random matchmaking from placing new arrivals in an active round.
+                    if (Runner.SessionInfo.IsValid)
+                        Runner.SessionInfo.IsOpen = false;
                     playStartTick = Runner.Tick.Raw;
                     AliveCount = playerCount;
                     State = RoundState.Playing;

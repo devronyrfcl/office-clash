@@ -114,7 +114,7 @@ Goal: playable with touch only.
 Goal: launch the app, press Play, and end up in a match with other people.
 
 - [ ] 5.1 Create `Main Menu` scene using GUI Pro-CasualGame (start from its `Title` and `Lobby` panels): Quick Match, Play with Friends, Customize placeholder, Settings placeholder
-- [ ] 5.2 Quick Match: join any open session with fewer than 10 players, or create one. *Needs 5.1*
+- [ ] 5.2 Quick Match: join any open session with fewer than 10 players, or create one. *Menu connected; an editor play test created a session, loaded Office, and spawned the local player. Joining an existing session and closing it when play starts still need a two-client test. Needs 5.1*
 - [ ] 5.3 Lobby state: player count "6/10", short countdown, auto-start when full or the timer ends. *Needs 5.2, 2.9*
 - [ ] 5.4 Private room by code (create, share, join). *Needs 5.2*
 - [ ] 5.5 Scene flow: Menu → Lobby → Office → Results → back to Menu, with Fusion scene loading handled. *Needs 5.3*

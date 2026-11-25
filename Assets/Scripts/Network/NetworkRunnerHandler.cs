@@ -28,6 +28,10 @@ public class NetworkRunnerHandler : MonoBehaviour
 
     void Start()
     {
+        // A runner started from MainMenu persists while Fusion loads this scene.
+        if (networkRunner != null && (networkRunner.IsRunning || networkRunner.IsStarting))
+            return;
+
         if (networkRunner == null)
         {
             networkRunner = Instantiate(networkRunnerPrefab);

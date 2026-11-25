@@ -1,0 +1,1755 @@
+fileFormatVersion: 2
+guid: baf0a4d72a4624aa2b0cebc3a5463136
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_0
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 718
+        width: 10
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33984ed2fb83f4b5d877ae7248c8da8c
+      internalID: -714699195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_1
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 718
+        width: 31
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e4f4835da12c48c4a331a68a31b0854
+      internalID: -749037997
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_2
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 718
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad61985501e5c4a2088488312af36388
+      internalID: 1450472560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_3
+      rect:
+        serializedVersion: 2
+        x: 382
+        y: 712
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0e1e8fb8409d40dfa36b9aa624d9565
+      internalID: 879059119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_4
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 719
+        width: 6
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a031360ff4765405d8620185ac9fc161
+      internalID: -634466594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_5
+      rect:
+        serializedVersion: 2
+        x: 669
+        y: 718
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 584a1fbed05864f18ab152d64f2be91e
+      internalID: 526913552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_6
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 718
+        width: 37
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd13dfd32247d4514aaf6ca5f462ccd2
+      internalID: 1250444400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_7
+      rect:
+        serializedVersion: 2
+        x: 790
+        y: 707
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 122c6eaf7315b4fd9998dcad0ffc795a
+      internalID: 1923071039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_8
+      rect:
+        serializedVersion: 2
+        x: 1058
+        y: 718
+        width: 17
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0cd098a5ec9d4528b2154dab568fb44
+      internalID: -1000204849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_9
+      rect:
+        serializedVersion: 2
+        x: 1305
+        y: 362
+        width: 353
+        height: 361
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69b57a384f54146cc88d094decef8b13
+      internalID: -310730280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_10
+      rect:
+        serializedVersion: 2
+        x: 1585
+        y: 712
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2294cd769ed4845fc80dee98ffcc2885
+      internalID: 1108001664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_11
+      rect:
+        serializedVersion: 2
+        x: 1651
+        y: 0
+        width: 412
+        height: 724
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 438bcc560dc6443b18addf975a3a767c
+      internalID: 1761728004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_12
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 360
+        width: 357
+        height: 355
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d2ba7f7f813e40ec9905144389981a3
+      internalID: -1202020347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_13
+      rect:
+        serializedVersion: 2
+        x: 509
+        y: 356
+        width: 352
+        height: 359
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 710062abde14c4fa588e7e087c8e51da
+      internalID: -1608994872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_14
+      rect:
+        serializedVersion: 2
+        x: 904
+        y: 681
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa52a45981c4e445c882758420575526
+      internalID: -191120363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_15
+      rect:
+        serializedVersion: 2
+        x: 908
+        y: 0
+        width: 352
+        height: 716
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26e7efc0ab42645a2ac516918fdde47e
+      internalID: -305373310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_16
+      rect:
+        serializedVersion: 2
+        x: 1685
+        y: 643
+        width: 46
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef126ab872afc438bac9108ae8c5d960
+      internalID: 479239968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_17
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 668
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fb3eab776bbb4fb7b1be62386ce097c
+      internalID: 325728782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_18
+      rect:
+        serializedVersion: 2
+        x: 1649
+        y: 639
+        width: 21
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24db6ebab6c754404a92cbc9e4ac7b53
+      internalID: -1234312373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_19
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 623
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cfc9e1d490084ac5bdd1a9cb48af3fe
+      internalID: -1540507727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_20
+      rect:
+        serializedVersion: 2
+        x: 1285
+        y: 623
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6334882fc00374f05a50479edb6a6f2e
+      internalID: 924754142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_21
+      rect:
+        serializedVersion: 2
+        x: 877
+        y: 611
+        width: 14
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48258ea2d7b6147df9e716c9744ae7a1
+      internalID: 284693349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_22
+      rect:
+        serializedVersion: 2
+        x: 484
+        y: 598
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 046e2f77161f54b5494c6f50b03053ad
+      internalID: -228455698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_23
+      rect:
+        serializedVersion: 2
+        x: 900
+        y: 546
+        width: 4
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 97d3827a592a64f52a47cbb4074c73cb
+      internalID: 74782170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_24
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 521
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b903c28c9e419482c93b92e6afe55c28
+      internalID: -1780860224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_25
+      rect:
+        serializedVersion: 2
+        x: 1654
+        y: 515
+        width: 4
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 089d291ae016f44cba17043c91ea1f04
+      internalID: 2081298528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_26
+      rect:
+        serializedVersion: 2
+        x: 878
+        y: 471
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0bb6637d205443b2882b5336b377fbd
+      internalID: 308232463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_27
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 445
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f551e88b4930a46d296c72bb35a80a49
+      internalID: 308242598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_28
+      rect:
+        serializedVersion: 2
+        x: 1659
+        y: 452
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfa6982b11eb7431eb01ea3fdcb16fe4
+      internalID: 2054943443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_29
+      rect:
+        serializedVersion: 2
+        x: 503
+        y: 426
+        width: 6
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc66c3aa579f34a6fa7bd29bc303847c
+      internalID: 1247815813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_30
+      rect:
+        serializedVersion: 2
+        x: 853
+        y: 426
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2388cdf6105604e9b84f22f511833146
+      internalID: 735397157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_31
+      rect:
+        serializedVersion: 2
+        x: 554
+        y: 339
+        width: 25
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55d9be3a3923646ddaf5dfdd2d315a62
+      internalID: 558347737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_32
+      rect:
+        serializedVersion: 2
+        x: 1279
+        y: 369
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b97fbdfbb497c406fb76a1bf4676733a
+      internalID: 1436090523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_33
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 0
+        width: 358
+        height: 363
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3477ac5e622f47f8a98908b6cc7e407
+      internalID: -1411551566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_34
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 0
+        width: 376
+        height: 357
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2920ab547e164e0a9affd50c8cf9827
+      internalID: -44269306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_35
+      rect:
+        serializedVersion: 2
+        x: 1215
+        y: 285
+        width: 51
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 174a1dae4579648a0b7d3a864659195e
+      internalID: 897895621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_36
+      rect:
+        serializedVersion: 2
+        x: 1292
+        y: 6
+        width: 369
+        height: 357
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d565b90d771f488fa54e4a80bc32ca4
+      internalID: -654340540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_37
+      rect:
+        serializedVersion: 2
+        x: 1667
+        y: 331
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45e75438be1974eb1a21dbfece1f3f4f
+      internalID: -1371837642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_38
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 286
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e891ffa9e7439414a85814afdbf2ff68
+      internalID: 262527495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_39
+      rect:
+        serializedVersion: 2
+        x: 1304
+        y: 286
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5bd3aa2f3a4ab4620a061e06eb782eca
+      internalID: 1862355324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_40
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 288
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4735595aab09f4a4682e771977f1e00b
+      internalID: 1253183287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_41
+      rect:
+        serializedVersion: 2
+        x: 452
+        y: 273
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51aa7c85586a1472aaf6f76be716ef4a
+      internalID: -1078536024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_42
+      rect:
+        serializedVersion: 2
+        x: 897
+        y: 267
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4ae44fb55a844dc59ac39f68e7eb741
+      internalID: -166597950
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_43
+      rect:
+        serializedVersion: 2
+        x: 1261
+        y: 274
+        width: 5
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4623553084e14a41961926982d21b17
+      internalID: -2132263786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_44
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 273
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac215761c02dd4b8fa69de009ba7f04a
+      internalID: -496882756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_45
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 273
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17036d0400fa1449eaec1f2bfb290dcd
+      internalID: -1851897868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_46
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 261
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efd4ca4177f2f4c3d9deaf3e96935759
+      internalID: -2017100247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_47
+      rect:
+        serializedVersion: 2
+        x: 1686
+        y: 267
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cbb56a5b728b47aba6de8d5014c73f9
+      internalID: 1895983243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_48
+      rect:
+        serializedVersion: 2
+        x: 1285
+        y: 248
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6bb35cca7de84454b87b6a5edf5d6902
+      internalID: -1379087685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_49
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 248
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56fa3ef0a96164c98b5f8a12a85f4778
+      internalID: -1342324719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_50
+      rect:
+        serializedVersion: 2
+        x: 2081
+        y: 248
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb85a129c15ed494c87d7ce57d299698
+      internalID: 1470967291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_51
+      rect:
+        serializedVersion: 2
+        x: 2087
+        y: 235
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25212a80b1810408896436716ba4fa10
+      internalID: 884561943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_52
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 191
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bcb98d57554b4d85a24e5a7ec92be98
+      internalID: 137894020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_53
+      rect:
+        serializedVersion: 2
+        x: 1680
+        y: 114
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 391dc867d004c459780c9e2a901d46b9
+      internalID: -1013176264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_54
+      rect:
+        serializedVersion: 2
+        x: 471
+        y: 76
+        width: 6
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29622adc1eac243339563d0d6ed239dd
+      internalID: 249703050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_55
+      rect:
+        serializedVersion: 2
+        x: 1292
+        y: 95
+        width: 4
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 26a598e70302a4ac18c257ef014c6d12
+      internalID: 1684376695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_56
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 89
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8eebe11166d54105952d1e31167fa8d
+      internalID: 542410747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_57
+      rect:
+        serializedVersion: 2
+        x: 859
+        y: 83
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20b7b65a13b824edf84ee77f90827c3a
+      internalID: -880738135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_58
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 76
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be3fedb20908342f894cf94f4c3f7421
+      internalID: 676190635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_59
+      rect:
+        serializedVersion: 2
+        x: 1304
+        y: 70
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd368164ed42d451a8a476f25e7551b1
+      internalID: -38545896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_60
+      rect:
+        serializedVersion: 2
+        x: 1285
+        y: 51
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4471eea9e87b24efaaae97d3a2ea9231
+      internalID: 288549650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_61
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 0
+        width: 45
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bb42a72b5f944f7d96c9264d38e5e90
+      internalID: 440842959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_62
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 32
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 735bcd0b0282149f6aaa59adb6fa1b26
+      internalID: 438673758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_63
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 0
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7450600b7cb0475abd9d5d8af701c4c
+      internalID: -109075939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_64
+      rect:
+        serializedVersion: 2
+        x: 222
+        y: 0
+        width: 14
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35103a6d3ab234933889ce243594cbdf
+      internalID: 632859400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_65
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 0
+        width: 13
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d17c0a58921904e8bbea353de2b48eb9
+      internalID: 997372801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_66
+      rect:
+        serializedVersion: 2
+        x: 1374
+        y: 0
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c35f61220e5c44b2a2871676a3eb0c7
+      internalID: 538913214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_67
+      rect:
+        serializedVersion: 2
+        x: 1438
+        y: 0
+        width: 13
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2fbcf957275a74d76b687332f9d7791e
+      internalID: -1244646391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_68
+      rect:
+        serializedVersion: 2
+        x: 1514
+        y: 0
+        width: 19
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 097a276497f934830ac5ad41e322ed10
+      internalID: -2076926961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Chibi Office Team Avatar Grid_69
+      rect:
+        serializedVersion: 2
+        x: 1591
+        y: 0
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d3cd11d08f4f4cde8c60fd839dff414
+      internalID: 2092503960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: e2cd59471f3da40149aa3c5fefc7d4e2
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Chibi Office Team Avatar Grid_0: -714699195
+      Chibi Office Team Avatar Grid_1: -749037997
+      Chibi Office Team Avatar Grid_10: 1108001664
+      Chibi Office Team Avatar Grid_11: 1761728004
+      Chibi Office Team Avatar Grid_12: -1202020347
+      Chibi Office Team Avatar Grid_13: -1608994872
+      Chibi Office Team Avatar Grid_14: -191120363
+      Chibi Office Team Avatar Grid_15: -305373310
+      Chibi Office Team Avatar Grid_16: 479239968
+      Chibi Office Team Avatar Grid_17: 325728782
+      Chibi Office Team Avatar Grid_18: -1234312373
+      Chibi Office Team Avatar Grid_19: -1540507727
+      Chibi Office Team Avatar Grid_2: 1450472560
+      Chibi Office Team Avatar Grid_20: 924754142
+      Chibi Office Team Avatar Grid_21: 284693349
+      Chibi Office Team Avatar Grid_22: -228455698
+      Chibi Office Team Avatar Grid_23: 74782170
+      Chibi Office Team Avatar Grid_24: -1780860224
+      Chibi Office Team Avatar Grid_25: 2081298528
+      Chibi Office Team Avatar Grid_26: 308232463
+      Chibi Office Team Avatar Grid_27: 308242598
+      Chibi Office Team Avatar Grid_28: 2054943443
+      Chibi Office Team Avatar Grid_29: 1247815813
+      Chibi Office Team Avatar Grid_3: 879059119
+      Chibi Office Team Avatar Grid_30: 735397157
+      Chibi Office Team Avatar Grid_31: 558347737
+      Chibi Office Team Avatar Grid_32: 1436090523
+      Chibi Office Team Avatar Grid_33: -1411551566
+      Chibi Office Team Avatar Grid_34: -44269306
+      Chibi Office Team Avatar Grid_35: 897895621
+      Chibi Office Team Avatar Grid_36: -654340540
+      Chibi Office Team Avatar Grid_37: -1371837642
+      Chibi Office Team Avatar Grid_38: 262527495
+      Chibi Office Team Avatar Grid_39: 1862355324
+      Chibi Office Team Avatar Grid_4: -634466594
+      Chibi Office Team Avatar Grid_40: 1253183287
+      Chibi Office Team Avatar Grid_41: -1078536024
+      Chibi Office Team Avatar Grid_42: -166597950
+      Chibi Office Team Avatar Grid_43: -2132263786
+      Chibi Office Team Avatar Grid_44: -496882756
+      Chibi Office Team Avatar Grid_45: -1851897868
+      Chibi Office Team Avatar Grid_46: -2017100247
+      Chibi Office Team Avatar Grid_47: 1895983243
+      Chibi Office Team Avatar Grid_48: -1379087685
+      Chibi Office Team Avatar Grid_49: -1342324719
+      Chibi Office Team Avatar Grid_5: 526913552
+      Chibi Office Team Avatar Grid_50: 1470967291
+      Chibi Office Team Avatar Grid_51: 884561943
+      Chibi Office Team Avatar Grid_52: 137894020
+      Chibi Office Team Avatar Grid_53: -1013176264
+      Chibi Office Team Avatar Grid_54: 249703050
+      Chibi Office Team Avatar Grid_55: 1684376695
+      Chibi Office Team Avatar Grid_56: 542410747
+      Chibi Office Team Avatar Grid_57: -880738135
+      Chibi Office Team Avatar Grid_58: 676190635
+      Chibi Office Team Avatar Grid_59: -38545896
+      Chibi Office Team Avatar Grid_6: 1250444400
+      Chibi Office Team Avatar Grid_60: 288549650
+      Chibi Office Team Avatar Grid_61: 440842959
+      Chibi Office Team Avatar Grid_62: 438673758
+      Chibi Office Team Avatar Grid_63: -109075939
+      Chibi Office Team Avatar Grid_64: 632859400
+      Chibi Office Team Avatar Grid_65: 997372801
+      Chibi Office Team Avatar Grid_66: 538913214
+      Chibi Office Team Avatar Grid_67: -1244646391
+      Chibi Office Team Avatar Grid_68: -2076926961
+      Chibi Office Team Avatar Grid_69: 2092503960
+      Chibi Office Team Avatar Grid_7: 1923071039
+      Chibi Office Team Avatar Grid_8: -1000204849
+      Chibi Office Team Avatar Grid_9: -310730280
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
